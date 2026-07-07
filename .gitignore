@@ -1,0 +1,21 @@
+# Backend
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/*.db
+backend/.env
+backend/*.pyc
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude
+CLAUDE.md

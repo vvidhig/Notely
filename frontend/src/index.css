@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Yeseva+One&family=Quicksand:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans:    'Quicksand', sans-serif;
+  --font-display: 'Yeseva One', serif;
+
+  /* ── Brand palette ─────────────────────────────── */
+  --color-abyss:      #0D3B66;   /* Ocean Abyss   — primary, sidebar */
+  --color-lagoon:     #1FA7A6;   /* Lagoon Depths — teal accent      */
+  --color-orchid:     #6C2E7B;   /* Orchid Dream  — purple accent    */
+  --color-lilac:      #8B7FD6;   /* Moonlit Lilac — soft purple      */
+  --color-coral:      #E75480;   /* Coral Kiss    — urgent / error   */
+  --color-tangerine:  #FF8A5B;   /* Tangerine Tide — warm accent     */
+  --color-amber:      #FFC857;   /* Sunlit Amber  — warning / gold   */
+  --color-shell:      #FFD8C7;   /* Shell Glow    — blush tint       */
+
+  /* ── Text hierarchy ────────────────────────────── */
+  --color-ink:    #0D3B66;
+  --color-ink-2:  #64748B;
+  --color-ink-3:  #94A3B8;
+
+  /* ── Page backgrounds ──────────────────────────── */
+  --color-bg-dashboard:  #FFF6F2;
+  --color-bg-tasks:      #FFF2F4;
+  --color-bg-sessions:   #EEF9F8;
+  --color-bg-highlights: #FAF4FD;
+  --color-bg-auth:       #F0F4FA;
+
+  /* ── Legacy aliases (keep for code still referencing old tokens) */
+  --color-navy:       #0D3B66;
+  --color-blue:       #1FA7A6;
+  --color-sky:        #8B7FD6;
+  --color-sand:       #FFD8C7;
+  --color-sky-border: rgba(13,59,102,.1);
+}
+
+/* ── Design-token CSS custom properties ──────────────────── */
+:root {
+  --card-bg:         #ffffff;
+  --card-radius:     24px;
+  --card-border:     1px solid rgba(13,59,102,.06);
+  --card-shadow:     0 12px 40px rgba(13,59,102,.08);
+  --card-shadow-hover: 0 18px 45px rgba(13,59,102,.15);
+  --card-transition: all 250ms ease;
+
+  --btn-radius:  16px;
+  --input-radius: 16px;
+  --pill-radius:  999px;
+}
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    background-color: var(--color-bg-auth, #F0F4FA);
+    color: #0D3B66;
+    font-family: 'Quicksand', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::-webkit-scrollbar       { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(13,59,102,.2); border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(13,59,102,.35); }
+}
+
+/* ── Reusable component classes ──────────────────────────── */
+@layer components {
+  .n-card {
+    background: var(--card-bg);
+    border-radius: var(--card-radius);
+    border: var(--card-border);
+    box-shadow: var(--card-shadow);
+    transition: var(--card-transition);
+  }
+
+  .n-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-shadow-hover);
+  }
+
+  .n-btn-primary {
+    background: #0D3B66;
+    color: #ffffff;
+    border-radius: var(--btn-radius);
+    font-weight: 700;
+    font-size: 0.875rem;
+    transition: background 200ms;
+  }
+  .n-btn-primary:hover { background: #154D83; }
+
+  .n-btn-teal {
+    background: #1FA7A6;
+    color: #ffffff;
+    border-radius: var(--btn-radius);
+    font-weight: 700;
+    font-size: 0.875rem;
+    transition: background 200ms;
+  }
+  .n-btn-teal:hover { background: #178F8E; }
+
+  .n-input {
+    background: #F8FAFC;
+    border: 1px solid rgba(13,59,102,.12);
+    border-radius: var(--input-radius);
+    color: #0D3B66;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: border-color 150ms, box-shadow 150ms;
+  }
+  .n-input:focus {
+    outline: none;
+    border-color: #1FA7A6;
+    box-shadow: 0 0 0 3px rgba(31,167,166,.12);
+  }
+  .n-input::placeholder { color: #94A3B8; }
+}
