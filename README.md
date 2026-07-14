@@ -11,6 +11,14 @@ Notely is an all-in-one productivity workspace: record meetings and sessions, le
 <img src="assests/highlights.png">
 <img src="assests/schedule.png">
 
+## Live Demo
+
+🔗 **Live Website:** https://notely-rust.vercel.app/
+
+> **Note**
+>
+> The backend is hosted on **Render's Free Tier**. If the application has been inactive, Render spins the server down to save resources. The **first request may take around 2–3 minutes** while the backend wakes up. Once it's running, everything works normally.
+
 
 ## Features
 
