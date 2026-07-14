@@ -4,7 +4,7 @@ import TaskModal from "../components/TaskModal";
 import type { Task } from "../types";
 import { useTasks } from "../hooks/useTasks";
 import { listTasks } from "../services/api";
-import { Plus, Search, Calendar, CheckCircle2, Minus } from "lucide-react";
+import { Plus, Search, Calendar, CheckCircle2, Circle, Minus } from "lucide-react";
 
 /* ─── helpers ─────────────────────────────────────────────────────────── */
 
@@ -20,9 +20,9 @@ function getColumn(t: Task): "todo" | "in_progress" | "done" {
 
 function getPriority(tags?: string | null): { label: string; color: string; dot: boolean } | null {
   const t = (tags ?? "").toLowerCase();
-  if (t.includes("high")) return { label: "High", color: "#895159", dot: true };
-  if (t.includes("med"))  return { label: "Med",  color: "#BABDE2", dot: true };
-  if (t.includes("low"))  return { label: "Low",  color: "rgba(55,67,117,.40)", dot: false };
+  if (t.includes("high")) return { label: "High", color: "#111111", dot: true };
+  if (t.includes("med"))  return { label: "Med",  color: "#8A8A8A", dot: true };
+  if (t.includes("low"))  return { label: "Low",  color: "rgba(17,17,17,.40)", dot: false };
   return null;
 }
 
@@ -49,17 +49,17 @@ function MinusBtn({ onClick, title }: { onClick: () => void; title?: string }) {
       style={{
         width: 22, height: 22,
         borderRadius: 6,
-        backgroundColor: "rgba(55,67,117,.07)",
-        color: "rgba(55,67,117,.45)",
+        backgroundColor: "rgba(17,17,17,.07)",
+        color: "rgba(17,17,17,.45)",
         flexShrink: 0,
       }}
       onMouseEnter={(e) => {
-        (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(55,67,117,.15)";
-        (e.currentTarget as HTMLButtonElement).style.color = "#374375";
+        (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(17,17,17,.15)";
+        (e.currentTarget as HTMLButtonElement).style.color = "#111111";
       }}
       onMouseLeave={(e) => {
-        (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(55,67,117,.07)";
-        (e.currentTarget as HTMLButtonElement).style.color = "rgba(55,67,117,.45)";
+        (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(17,17,17,.07)";
+        (e.currentTarget as HTMLButtonElement).style.color = "rgba(17,17,17,.45)";
       }}
     >
       <Minus size={10} />
@@ -70,13 +70,14 @@ function MinusBtn({ onClick, title }: { onClick: () => void; title?: string }) {
 /* ─── TaskCard ────────────────────────────────────────────────────────── */
 
 function TaskCard({
-  task, onEdit, onDelete, onMoveToTodo, onComplete, isDone,
+  task, onEdit, onDelete, onMoveToTodo, onComplete, onToggleDone, isDone,
 }: {
   task: Task;
   onEdit: () => void;
   onDelete: () => void;
-  onMoveToTodo?: () => void;  // In Progress → To Do
-  onComplete?: () => void;    // In Progress → Done
+  onMoveToTodo?: () => void;   // In Progress → To Do
+  onComplete?: () => void;     // In Progress → Done
+  onToggleDone?: () => void;   // checkbox: mark finished / reactivate
   isDone?: boolean;
 }) {
   const [hovering, setHovering] = useState(false);
@@ -91,9 +92,9 @@ function TaskCard({
       style={{
         backgroundColor: "#ffffff",
         borderRadius: 14,
-        border: "1px solid rgba(55,67,117,.08)",
+        border: "1px solid rgba(17,17,17,.08)",
         padding: "12px 14px",
-        boxShadow: hovering ? "0 4px 16px rgba(55,67,117,.10)" : "0 1px 4px rgba(55,67,117,.05)",
+        boxShadow: hovering ? "0 4px 16px rgba(17,17,17,.10)" : "0 1px 4px rgba(17,17,17,.05)",
         opacity: isDone ? 0.72 : 1,
         transition: "all 180ms ease",
         marginBottom: 8,
@@ -104,8 +105,8 @@ function TaskCard({
         <div>
           {categoryTag && (
             <span
-              className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-              style={{ backgroundColor: "rgba(55,67,117,.08)", color: "#374375" }}
+              className="text-sm font-bold px-2 py-0.5 rounded-full"
+              style={{ backgroundColor: "rgba(17,17,17,.08)", color: "#111111" }}
             >
               {categoryTag}
             </span>
@@ -113,7 +114,7 @@ function TaskCard({
         </div>
         {priority && (
           <span
-            className="text-[10px] font-bold flex items-center gap-1 flex-shrink-0"
+            className="text-sm font-bold flex items-center gap-1 flex-shrink-0"
             style={{ color: priority.color }}
           >
             {priority.dot
@@ -125,29 +126,43 @@ function TaskCard({
         )}
       </div>
 
-      {/* title */}
-      <p
-        className="text-sm font-bold leading-snug mb-3 cursor-pointer"
-        style={{
-          color: isDone ? "rgba(55,67,117,.45)" : "#374375",
-          textDecoration: isDone ? "line-through" : "none",
-        }}
-        onClick={onEdit}
-      >
-        {task.title}
-      </p>
+      {/* title + finish checkbox */}
+      <div className="flex items-start gap-2.5 mb-3">
+        {onToggleDone && (
+          <button
+            title={isDone ? "Mark as not done" : "Mark as finished"}
+            onClick={(e) => { e.stopPropagation(); onToggleDone(); }}
+            className="flex-shrink-0 mt-0.5 transition-all"
+            style={{ color: isDone ? "#111111" : "rgba(17,17,17,.35)" }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#111111"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = isDone ? "#111111" : "rgba(17,17,17,.35)"; }}
+          >
+            {isDone ? <CheckCircle2 size={18} /> : <Circle size={18} />}
+          </button>
+        )}
+        <p
+          className="text-lg font-bold leading-snug cursor-pointer flex-1"
+          style={{
+            color: isDone ? "rgba(17,17,17,.45)" : "#111111",
+            textDecoration: isDone ? "line-through" : "none",
+          }}
+          onClick={onEdit}
+        >
+          {task.title}
+        </p>
+      </div>
 
       {/* bottom row: date + action buttons */}
       <div className="flex items-center justify-between">
         {/* date */}
-        <div className="flex items-center gap-1" style={{ color: isOverdue ? "#895159" : "rgba(55,67,117,.50)" }}>
+        <div className="flex items-center gap-1" style={{ color: isOverdue ? "#111111" : "rgba(17,17,17,.50)" }}>
           {task.due_date ? (
             isDone ? (
-              <span className="text-[11px] font-semibold">✓ {fmtDate(task.due_date)}</span>
+              <span className="text-sm font-semibold">✓ {fmtDate(task.due_date)}</span>
             ) : (
               <>
                 <Calendar size={11} />
-                <span className="text-[11px] font-semibold">{fmtDate(task.due_date)}</span>
+                <span className="text-sm font-semibold">{fmtDate(task.due_date)}</span>
               </>
             )
           ) : null}
@@ -184,25 +199,25 @@ function KanbanColumn({
   children: React.ReactNode;
   footerStyle?: "dashed-navy" | "dashed-periwinkle" | "solid-muted";
 }) {
-  const footerBg = footerStyle === "solid-muted" ? "rgba(55,67,117,.04)" : "transparent";
+  const footerBg = footerStyle === "solid-muted" ? "rgba(17,17,17,.04)" : "transparent";
   const footerBorder =
-    footerStyle === "dashed-periwinkle" ? "1px dashed rgba(186,189,226,.55)" :
-    footerStyle === "solid-muted" ? "1px dashed rgba(55,67,117,.15)" :
-    "1px dashed rgba(55,67,117,.18)";
+    footerStyle === "dashed-periwinkle" ? "1px dashed rgba(17,17,17,.55)" :
+    footerStyle === "solid-muted" ? "1px dashed rgba(17,17,17,.15)" :
+    "1px dashed rgba(17,17,17,.18)";
 
   return (
     <div className="flex-1 flex flex-col min-w-0" style={{ minWidth: 220 }}>
       {/* column header */}
       <div className="flex items-center gap-2 mb-3 flex-shrink-0">
         <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: dotColor }} />
-        <p className="text-sm font-bold flex-1" style={{ color: "#374375" }}>{title}</p>
-        <span className="text-xs font-bold" style={{ color: "rgba(55,67,117,.55)" }}>{count}</span>
+        <p className="text-lg font-bold flex-1" style={{ color: "#111111" }}>{title}</p>
+        <span className="text-base font-bold" style={{ color: "rgba(17,17,17,.55)" }}>{count}</span>
         <button
           onClick={onAdd}
           className="w-5 h-5 flex items-center justify-center rounded-md transition-all"
-          style={{ backgroundColor: "rgba(55,67,117,.07)", color: "rgba(55,67,117,.45)" }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(55,67,117,.15)"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(55,67,117,.07)"; }}
+          style={{ backgroundColor: "rgba(17,17,17,.07)", color: "rgba(17,17,17,.45)" }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(17,17,17,.15)"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(17,17,17,.07)"; }}
         >
           <Plus size={11} />
         </button>
@@ -217,14 +232,14 @@ function KanbanColumn({
       <div className="pt-1 pb-1 flex-shrink-0">
         <button
           onClick={onAdd}
-          className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold transition-all"
+          className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-base font-bold transition-all"
           style={{
             backgroundColor: footerBg,
-            color: "rgba(55,67,117,.40)",
+            color: "rgba(17,17,17,.40)",
             border: footerBorder,
           }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#374375"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(55,67,117,.40)"; }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#111111"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(17,17,17,.40)"; }}
         >
           <Plus size={12} /> Add task
         </button>
@@ -310,9 +325,7 @@ export default function TasksPage() {
     <div
       className="flex h-[100dvh]"
       style={{
-        backgroundColor: "#FFFCF5",
-        backgroundImage: "radial-gradient(rgba(55,67,117,.06) 1.5px, transparent 1.5px)",
-        backgroundSize: "28px 28px",
+        backgroundColor: "#FFFFFF",
       }}
     >
       <Sidebar />
@@ -322,21 +335,21 @@ export default function TasksPage() {
         {/* ── header ─────────────────────────────────────────────────── */}
         <div className="px-6 pt-5 pb-3 flex items-center justify-between flex-shrink-0">
           <div>
-            <h1 className="font-['Yeseva_One'] text-2xl font-bold" style={{ color: "#374375" }}>
+            <h1 className="font-['Yeseva_One'] text-4xl font-bold" style={{ color: "#111111" }}>
               Task Manager
             </h1>
-            <p className="text-sm mt-0.5" style={{ color: "rgba(55,67,117,.55)" }}>
+            <p className="text-lg mt-0.5" style={{ color: "rgba(17,17,17,.55)" }}>
               {activeCnt} active · {doneTasks.length} completed
             </p>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowDone((v) => !v)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-base font-bold transition-all"
               style={{
-                backgroundColor: showDone ? "rgba(55,67,117,.08)" : "rgba(55,67,117,.05)",
-                color: "rgba(55,67,117,.55)",
-                border: "1px solid rgba(55,67,117,.10)",
+                backgroundColor: showDone ? "rgba(17,17,17,.08)" : "rgba(17,17,17,.05)",
+                color: "rgba(17,17,17,.55)",
+                border: "1px solid rgba(17,17,17,.10)",
               }}
             >
               <CheckCircle2 size={13} />
@@ -344,10 +357,10 @@ export default function TasksPage() {
             </button>
             <button
               onClick={() => openModal("todo")}
-              className="flex items-center gap-2 px-4 py-2 rounded-2xl text-sm font-bold text-white transition-all"
-              style={{ backgroundColor: "#374375" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#2A3562"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#374375"; }}
+              className="flex items-center gap-2 px-4 py-2 rounded-2xl text-lg font-bold text-white transition-all"
+              style={{ backgroundColor: "#111111" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#000000"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#111111"; }}
             >
               <Plus size={16} /> New task
             </button>
@@ -359,59 +372,59 @@ export default function TasksPage() {
           {/* To Do */}
           <div
             className="flex items-center gap-3 px-4 py-3 rounded-xl"
-            style={{ backgroundColor: "#ffffff", border: "1px solid rgba(55,67,117,.08)", boxShadow: "0 2px 8px rgba(55,67,117,.05)" }}
+            style={{ backgroundColor: "#ffffff", border: "1px solid rgba(17,17,17,.08)", boxShadow: "0 2px 8px rgba(17,17,17,.05)" }}
           >
             <div
               className="w-5 h-5 rounded-full flex-shrink-0"
-              style={{ border: "2px solid rgba(55,67,117,.30)" }}
+              style={{ border: "2px solid rgba(17,17,17,.30)" }}
             />
             <div>
-              <p className="text-xl font-bold leading-none" style={{ color: "#374375" }}>{todoTasks.length}</p>
-              <p className="text-[11px] font-semibold mt-0.5" style={{ color: "rgba(55,67,117,.50)" }}>To Do</p>
+              <p className="text-3xl font-bold leading-none" style={{ color: "#111111" }}>{todoTasks.length}</p>
+              <p className="text-sm font-semibold mt-0.5" style={{ color: "rgba(17,17,17,.50)" }}>To Do</p>
             </div>
           </div>
 
           {/* In Progress */}
           <div
             className="flex items-center gap-3 px-4 py-3 rounded-xl"
-            style={{ backgroundColor: "#ffffff", border: "1px solid rgba(55,67,117,.08)", boxShadow: "0 2px 8px rgba(55,67,117,.05)" }}
+            style={{ backgroundColor: "#ffffff", border: "1px solid rgba(17,17,17,.08)", boxShadow: "0 2px 8px rgba(17,17,17,.05)" }}
           >
             <div
               className="w-5 h-5 rounded-full flex-shrink-0"
-              style={{ background: "conic-gradient(#BABDE2 0% 50%, rgba(186,189,226,.20) 50% 100%)" }}
+              style={{ background: "conic-gradient(#8A8A8A 0% 50%, rgba(17,17,17,.20) 50% 100%)" }}
             />
             <div>
-              <p className="text-xl font-bold leading-none" style={{ color: "#374375" }}>{inProgTasks.length}</p>
-              <p className="text-[11px] font-semibold mt-0.5" style={{ color: "rgba(55,67,117,.50)" }}>In Progress</p>
+              <p className="text-3xl font-bold leading-none" style={{ color: "#111111" }}>{inProgTasks.length}</p>
+              <p className="text-sm font-semibold mt-0.5" style={{ color: "rgba(17,17,17,.50)" }}>In Progress</p>
             </div>
           </div>
 
           {/* Done */}
           <div
             className="flex items-center gap-3 px-4 py-3 rounded-xl"
-            style={{ backgroundColor: "#ffffff", border: "1px solid rgba(55,67,117,.08)", boxShadow: "0 2px 8px rgba(55,67,117,.05)" }}
+            style={{ backgroundColor: "#ffffff", border: "1px solid rgba(17,17,17,.08)", boxShadow: "0 2px 8px rgba(17,17,17,.05)" }}
           >
             <div
               className="w-5 h-5 rounded-full flex-shrink-0"
-              style={{ backgroundColor: "rgba(55,67,117,.35)" }}
+              style={{ backgroundColor: "rgba(17,17,17,.35)" }}
             />
             <div>
-              <p className="text-xl font-bold leading-none" style={{ color: "#374375" }}>{doneTasks.length}</p>
-              <p className="text-[11px] font-semibold mt-0.5" style={{ color: "rgba(55,67,117,.50)" }}>Done</p>
+              <p className="text-3xl font-bold leading-none" style={{ color: "#111111" }}>{doneTasks.length}</p>
+              <p className="text-sm font-semibold mt-0.5" style={{ color: "rgba(17,17,17,.50)" }}>Done</p>
             </div>
           </div>
 
           {/* Completion % */}
           <div
             className="flex items-center gap-3 px-4 py-3 rounded-xl"
-            style={{ backgroundColor: "#ffffff", border: "1px solid rgba(55,67,117,.08)", boxShadow: "0 2px 8px rgba(55,67,117,.05)" }}
+            style={{ backgroundColor: "#ffffff", border: "1px solid rgba(17,17,17,.08)", boxShadow: "0 2px 8px rgba(17,17,17,.05)" }}
           >
-            <p className="text-sm font-bold" style={{ color: "#895159" }}>{pct}%</p>
+            <p className="text-lg font-bold" style={{ color: "#111111" }}>{pct}%</p>
             <div>
-              <p className="text-xl font-bold leading-none" style={{ color: "#374375" }}>
+              <p className="text-3xl font-bold leading-none" style={{ color: "#111111" }}>
                 {doneTasks.length}/{totalCnt}
               </p>
-              <p className="text-[11px] font-semibold mt-0.5" style={{ color: "rgba(55,67,117,.50)" }}>Completed</p>
+              <p className="text-sm font-semibold mt-0.5" style={{ color: "rgba(17,17,17,.50)" }}>Completed</p>
             </div>
           </div>
         </div>
@@ -423,10 +436,10 @@ export default function TasksPage() {
               <button
                 key={tag}
                 onClick={() => setActiveTag(tag)}
-                className="px-3 py-1.5 rounded-xl text-xs font-bold transition-all capitalize"
+                className="px-3 py-1.5 rounded-xl text-base font-bold transition-all capitalize"
                 style={{
-                  backgroundColor: activeTag === tag ? "#374375" : "rgba(55,67,117,.08)",
-                  color: activeTag === tag ? "#ffffff" : "#374375",
+                  backgroundColor: activeTag === tag ? "#111111" : "rgba(17,17,17,.08)",
+                  color: activeTag === tag ? "#ffffff" : "#111111",
                 }}
               >
                 {tag === "all" ? "All" : tag}
@@ -437,17 +450,17 @@ export default function TasksPage() {
             <Search
               size={13}
               className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
-              style={{ color: "rgba(55,67,117,.40)" }}
+              style={{ color: "rgba(17,17,17,.40)" }}
             />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search tasks..."
-              className="pl-8 pr-3 py-1.5 rounded-xl text-sm outline-none"
+              className="pl-8 pr-3 py-1.5 rounded-xl text-lg outline-none"
               style={{
                 backgroundColor: "#ffffff",
-                border: "1px solid rgba(55,67,117,.10)",
-                color: "#374375",
+                border: "1px solid rgba(17,17,17,.10)",
+                color: "#111111",
                 width: 200,
               }}
             />
@@ -461,7 +474,7 @@ export default function TasksPage() {
             {/* To Do */}
             <KanbanColumn
               title="To Do"
-              dotColor="#895159"
+              dotColor="#111111"
               count={filteredTodo.length}
               onAdd={() => openModal("todo")}
               footerStyle="dashed-navy"
@@ -474,6 +487,7 @@ export default function TasksPage() {
                   task={task}
                   onEdit={() => openModal("todo", task)}
                   onDelete={() => handleDelete(task.id)}
+                  onToggleDone={() => handleComplete(task.id)}
                 />
               ))}
             </KanbanColumn>
@@ -481,7 +495,7 @@ export default function TasksPage() {
             {/* In Progress */}
             <KanbanColumn
               title="In Progress"
-              dotColor="#BABDE2"
+              dotColor="#8A8A8A"
               count={filteredInProg.length}
               onAdd={() => openModal("in_progress")}
               footerStyle="dashed-periwinkle"
@@ -496,6 +510,7 @@ export default function TasksPage() {
                   onDelete={() => handleDelete(task.id)}
                   onMoveToTodo={() => handleToTodo(task.id)}
                   onComplete={() => handleComplete(task.id)}
+                  onToggleDone={() => handleComplete(task.id)}
                 />
               ))}
             </KanbanColumn>
@@ -504,7 +519,7 @@ export default function TasksPage() {
             {showDone && (
               <KanbanColumn
                 title="Done"
-                dotColor="rgba(55,67,117,.40)"
+                dotColor="rgba(17,17,17,.40)"
                 count={filteredDone.length}
                 onAdd={() => openModal("todo")}
                 footerStyle="solid-muted"
@@ -518,6 +533,7 @@ export default function TasksPage() {
                     isDone
                     onEdit={() => { setEditTask(task); setModalOpen(true); }}
                     onDelete={() => handleDelete(task.id)}
+                    onToggleDone={() => handleReactivate(task.id)}
                   />
                 ))}
               </KanbanColumn>
@@ -543,7 +559,7 @@ export default function TasksPage() {
 function EmptyState({ label }: { label: string }) {
   return (
     <div className="flex items-center justify-center py-10">
-      <p className="text-xs font-medium" style={{ color: "rgba(55,67,117,.35)" }}>{label}</p>
+      <p className="text-base font-medium" style={{ color: "rgba(17,17,17,.35)" }}>{label}</p>
     </div>
   );
 }

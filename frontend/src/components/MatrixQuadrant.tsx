@@ -51,10 +51,10 @@ export default function MatrixQuadrant({
         borderRadius: "24px",
         border: dragOver
           ? `2px solid ${cfg.color}`
-          : "1px solid rgba(13,59,102,.06)",
+          : "1px solid rgba(17,17,17,.06)",
         boxShadow: dragOver
           ? `0 0 0 3px ${cfg.color}22`
-          : "0 12px 40px rgba(13,59,102,.08)",
+          : "0 12px 40px rgba(17,17,17,.08)",
         minHeight: compact ? 140 : 200,
         transition: "box-shadow 200ms, border-color 200ms",
       }}
@@ -65,23 +65,23 @@ export default function MatrixQuadrant({
       {/* Coloured header strip */}
       <div
         className="flex items-center justify-between px-4 py-3 flex-shrink-0"
-        style={{ borderBottom: "1px solid rgba(13,59,102,.05)" }}
+        style={{ borderBottom: "1px solid rgba(17,17,17,.05)" }}
       >
         <div className="flex items-center gap-2">
-          <span className="text-sm">{cfg.emoji}</span>
-          <span className="text-xs font-bold uppercase tracking-wide" style={{ color: cfg.color }}>
+          <span style={{ color: cfg.color, display: "inline-flex" }}><cfg.icon size={18} /></span>
+          <span className="text-base font-bold uppercase tracking-wide" style={{ color: cfg.color }}>
             {cfg.label}
           </span>
           {active.length > 0 && (
             <span
-              className="text-[10px] px-1.5 py-0.5 rounded-full font-bold"
+              className="text-sm px-1.5 py-0.5 rounded-full font-bold"
               style={{ backgroundColor: cfg.badgeBg, color: cfg.badgeText }}
             >
               {active.length}
             </span>
           )}
           {!compact && (
-            <span className="text-[10px] hidden sm:inline" style={{ color: "#94A3B8" }}>
+            <span className="text-sm hidden sm:inline" style={{ color: "#8A8A8A" }}>
               {cfg.subtitle}
             </span>
           )}
@@ -114,7 +114,7 @@ export default function MatrixQuadrant({
         {hasMore && (
           <button
             onClick={() => setShowAll(true)}
-            className="text-xs font-semibold py-1 rounded-xl transition-opacity hover:opacity-70 text-center"
+            className="text-base font-semibold py-1 rounded-xl transition-opacity hover:opacity-70 text-center"
             style={{ color: cfg.color }}
           >
             + {tasks.length - maxVisible} more
@@ -123,14 +123,14 @@ export default function MatrixQuadrant({
 
         {tasks.length === 0 && (
           <div className="flex-1 flex items-center justify-center">
-            <p className="text-xs text-center py-4 italic" style={{ color: "#94A3B8" }}>
+            <p className="text-base text-center py-4 italic" style={{ color: "#8A8A8A" }}>
               {quadrant === "neither" ? "Nothing to eliminate" : "Drop tasks here"}
             </p>
           </div>
         )}
 
         {completed.length > 0 && showAll && (
-          <p className="text-[10px] font-semibold mt-1 px-1" style={{ color: "#94A3B8" }}>
+          <p className="text-sm font-semibold mt-1 px-1" style={{ color: "#8A8A8A" }}>
             {completed.length} completed
           </p>
         )}

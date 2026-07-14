@@ -15,10 +15,10 @@ export default function CalendarWidget({ dots = [] }: { dots?: CalendarDot[] }) 
   return (
     <div
       style={{
-        background: "rgba(186,189,226,.15)",
+        background: "rgba(17,17,17,.15)",
         borderRadius: "20px",
-        border: "1px solid rgba(186,189,226,.35)",
-        boxShadow: "0 4px 16px rgba(55,67,117,.08)",
+        border: "1px solid rgba(17,17,17,.35)",
+        boxShadow: "0 4px 16px rgba(17,17,17,.08)",
         padding: "12px 14px",
       }}
     >
@@ -27,15 +27,15 @@ export default function CalendarWidget({ dots = [] }: { dots?: CalendarDot[] }) 
         <button
           onClick={prevMonth}
           className="w-6 h-6 rounded-lg flex items-center justify-center transition-all hover:scale-110"
-          style={{ backgroundColor: "rgba(55,67,117,.12)", color: "#374375" }}
+          style={{ backgroundColor: "rgba(17,17,17,.12)", color: "#111111" }}
         >
           <ChevronLeft size={12} />
         </button>
-        <p className="text-xs font-bold" style={{ color: "#374375" }}>{monthLabel}</p>
+        <p className="text-base font-bold" style={{ color: "#111111" }}>{monthLabel}</p>
         <button
           onClick={nextMonth}
           className="w-6 h-6 rounded-lg flex items-center justify-center transition-all hover:scale-110"
-          style={{ backgroundColor: "rgba(55,67,117,.12)", color: "#374375" }}
+          style={{ backgroundColor: "rgba(17,17,17,.12)", color: "#111111" }}
         >
           <ChevronRight size={12} />
         </button>
@@ -44,8 +44,8 @@ export default function CalendarWidget({ dots = [] }: { dots?: CalendarDot[] }) 
       {/* Day-of-week headers */}
       <div className="grid grid-cols-7 mb-0.5">
         {DAY_HEADERS.map((d) => (
-          <div key={d} className="text-center text-[9px] font-bold py-0.5 uppercase tracking-wide"
-            style={{ color: "rgba(55,67,117,.50)" }}>
+          <div key={d} className="text-center text-xs font-bold py-0.5 uppercase tracking-wide"
+            style={{ color: "rgba(17,17,17,.50)" }}>
             {d}
           </div>
         ))}
@@ -63,21 +63,21 @@ export default function CalendarWidget({ dots = [] }: { dots?: CalendarDot[] }) 
             <button
               key={day}
               onClick={() => setSelected(sel ? null : day)}
-              className="relative flex flex-col items-center justify-center h-7 rounded-lg text-[11px] font-bold transition-all"
+              className="relative flex flex-col items-center justify-center h-7 rounded-lg text-sm font-bold transition-all"
               style={{
                 backgroundColor:
-                  today ? "#374375"
-                  : sel  ? "rgba(186,189,226,.30)"
+                  today ? "#111111"
+                  : sel  ? "rgba(17,17,17,.30)"
                   : "transparent",
                 color:
                   today ? "#ffffff"
-                  : sel  ? "#374375"
-                  : "#374375",
-                boxShadow: today ? "0 2px 8px rgba(55,67,117,.35)" : "none",
+                  : sel  ? "#111111"
+                  : "#111111",
+                boxShadow: today ? "0 2px 8px rgba(17,17,17,.35)" : "none",
               }}
               onMouseEnter={(e) => {
                 if (!today && !sel) {
-                  (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(55,67,117,.10)";
+                  (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(17,17,17,.10)";
                 }
               }}
               onMouseLeave={(e) => {
@@ -91,11 +91,11 @@ export default function CalendarWidget({ dots = [] }: { dots?: CalendarDot[] }) 
                 <div className="flex gap-px mt-px">
                   {dot.has_task && (
                     <span className="w-1 h-1 rounded-full"
-                      style={{ backgroundColor: today ? "rgba(255,255,255,.70)" : "#895159" }} />
+                      style={{ backgroundColor: today ? "rgba(255,255,255,.70)" : "#111111" }} />
                   )}
                   {dot.has_session && (
                     <span className="w-1 h-1 rounded-full"
-                      style={{ backgroundColor: today ? "rgba(255,255,255,.70)" : "#BABDE2" }} />
+                      style={{ backgroundColor: today ? "rgba(255,255,255,.70)" : "#8A8A8A" }} />
                   )}
                 </div>
               )}
@@ -107,12 +107,12 @@ export default function CalendarWidget({ dots = [] }: { dots?: CalendarDot[] }) 
       {/* Dot legend */}
       <div className="flex items-center gap-3 mt-2 px-1">
         <div className="flex items-center gap-1">
-          <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#895159" }} />
-          <span className="text-[9px] font-semibold" style={{ color: "rgba(55,67,117,.55)" }}>Task</span>
+          <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#111111" }} />
+          <span className="text-xs font-semibold" style={{ color: "rgba(17,17,17,.55)" }}>Task</span>
         </div>
         <div className="flex items-center gap-1">
-          <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#BABDE2" }} />
-          <span className="text-[9px] font-semibold" style={{ color: "rgba(55,67,117,.55)" }}>Session</span>
+          <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#8A8A8A" }} />
+          <span className="text-xs font-semibold" style={{ color: "rgba(17,17,17,.55)" }}>Session</span>
         </div>
       </div>
     </div>

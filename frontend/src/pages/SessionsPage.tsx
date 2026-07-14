@@ -6,7 +6,8 @@ import { listSessions, deleteSession } from "../services/api";
 import { useHighlights } from "../hooks/useHighlights";
 import type { Session } from "../types";
 import { SESSION_TYPES } from "../constants/sessionTypes";
-import { Plus, Search, Trash2, ArrowRight, Play } from "lucide-react";
+import { Plus, Search, Trash2, ArrowRight, Play, Clock, FileText, Sparkles, Mic, ClipboardList } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 /* ─── helpers ─────────────────────────────────────────────────────────── */
 
@@ -58,17 +59,18 @@ function groupByDate(sessions: Session[]): { label: string; sessions: Session[] 
   return [...groups.entries()].map(([label, sessions]) => ({ label, sessions }));
 }
 
-const TYPE_COLORS: Record<string, { bg: string; emoji: string }> = {
-  custom:      { bg: "rgba(55,67,117,.12)",   emoji: "⚡" },
-  meeting:     { bg: "rgba(186,189,226,.25)", emoji: "🗓️" },
-  coaching:    { bg: "rgba(255,236,210,.70)", emoji: "🏋️" },
-  tutoring:    { bg: "rgba(225,174,161,.30)", emoji: "📚" },
-  interview:   { bg: "rgba(186,189,226,.35)", emoji: "🎙️" },
-  client_call: { bg: "rgba(137,81,89,.12)",   emoji: "💼" },
+const TYPE_BG: Record<string, string> = {
+  custom:      "rgba(17,17,17,.12)",
+  meeting:     "rgba(17,17,17,.25)",
+  coaching:    "rgba(17,17,17,.15)",
+  tutoring:    "rgba(17,17,17,.10)",
+  interview:   "rgba(17,17,17,.35)",
+  client_call: "rgba(17,17,17,.12)",
 };
 
-function typeColor(type: string): { bg: string; emoji: string } {
-  return TYPE_COLORS[type] ?? { bg: "rgba(55,67,117,.10)", emoji: "📋" };
+function typeColor(type: string): { bg: string; Icon: LucideIcon } {
+  const Icon = SESSION_TYPES.find((t) => t.value === type)?.icon ?? ClipboardList;
+  return { bg: TYPE_BG[type] ?? "rgba(17,17,17,.10)", Icon };
 }
 
 /* ─── decorative waveform ─────────────────────────────────────────────── */
@@ -85,7 +87,7 @@ function Waveform({ isLive }: { isLive: boolean }) {
           width="2.5"
           height={h}
           rx="1.25"
-          fill={isLive ? "rgba(137,81,89,.35)" : "rgba(55,67,117,.18)"}
+          fill={isLive ? "rgba(17,17,17,.35)" : "rgba(17,17,17,.18)"}
         />
       ))}
     </svg>
@@ -148,9 +150,7 @@ export default function SessionsPage() {
   );
 
   const pageBg = {
-    backgroundColor: "#FFFCF5",
-    backgroundImage: "radial-gradient(rgba(55,67,117,.06) 1.5px, transparent 1.5px)",
-    backgroundSize: "28px 28px",
+    backgroundColor: "#FFFFFF",
   };
 
   return (
@@ -158,24 +158,24 @@ export default function SessionsPage() {
       <Sidebar />
 
       <main className="flex-1 overflow-y-auto">
-        <div className="max-w-4xl mx-auto px-6 py-6">
+        <div className="px-8 py-6">
 
           {/* ── header ────────────────────────────────────────────── */}
-          <div className="px-6 py-5 flex items-center justify-between mb-5">
+          <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="font-['Yeseva_One'] text-2xl font-bold" style={{ color: "#374375" }}>
+              <h1 className="font-['Yeseva_One'] text-4xl font-bold" style={{ color: "#111111" }}>
                 Sessions
               </h1>
-              <p className="text-sm mt-0.5" style={{ color: "rgba(55,67,117,.55)" }}>
+              <p className="text-lg mt-0.5" style={{ color: "rgba(17,17,17,.55)" }}>
                 {sessions.length} total · {liveSessions} live now
               </p>
             </div>
             <button
               onClick={() => { setPreselectedType(null); setNewOpen(true); }}
-              className="flex items-center gap-2 px-4 py-2 rounded-2xl text-sm font-bold text-white transition-all"
-              style={{ backgroundColor: "#374375" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#2A3562"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#374375"; }}
+              className="flex items-center gap-2 px-4 py-2 rounded-2xl text-lg font-bold text-white transition-all"
+              style={{ backgroundColor: "#111111" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#000000"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#111111"; }}
             >
               <Plus size={16} /> New session
             </button>
@@ -185,46 +185,52 @@ export default function SessionsPage() {
           <div className="grid grid-cols-4 gap-3 mb-5">
             <div
               className="rounded-xl px-4 py-3"
-              style={{ backgroundColor: "#ffffff", border: "1px solid rgba(55,67,117,.08)", boxShadow: "0 2px 8px rgba(55,67,117,.05)" }}
+              style={{ backgroundColor: "#ffffff", border: "1px solid rgba(17,17,17,.08)", boxShadow: "0 2px 8px rgba(17,17,17,.05)" }}
             >
-              <p className="text-xl font-bold" style={{ color: "#374375" }}>{totalDuration(sessions)}</p>
-              <p className="text-xs font-semibold mt-0.5" style={{ color: "rgba(55,67,117,.55)" }}>⏱ Total Time</p>
+              <p className="text-3xl font-bold" style={{ color: "#111111" }}>{totalDuration(sessions)}</p>
+              <p className="text-base font-semibold mt-0.5 flex items-center gap-1.5" style={{ color: "rgba(17,17,17,.55)" }}>
+                <Clock size={15} /> Total Time
+              </p>
             </div>
             <div
               className="rounded-xl px-4 py-3"
-              style={{ backgroundColor: "#ffffff", border: "1px solid rgba(55,67,117,.08)", boxShadow: "0 2px 8px rgba(55,67,117,.05)" }}
+              style={{ backgroundColor: "#ffffff", border: "1px solid rgba(17,17,17,.08)", boxShadow: "0 2px 8px rgba(17,17,17,.05)" }}
             >
-              <p className="text-xl font-bold" style={{ color: "#374375" }}>
+              <p className="text-3xl font-bold" style={{ color: "#111111" }}>
                 {sessions.reduce((s, n) => s + n.note_count, 0)}
               </p>
-              <p className="text-xs font-semibold mt-0.5" style={{ color: "rgba(55,67,117,.55)" }}>📝 Notes Captured</p>
+              <p className="text-base font-semibold mt-0.5 flex items-center gap-1.5" style={{ color: "rgba(17,17,17,.55)" }}>
+                <FileText size={15} /> Notes Captured
+              </p>
             </div>
             <div
               className="rounded-xl px-4 py-3"
-              style={{ backgroundColor: "#ffffff", border: "1px solid rgba(55,67,117,.08)", boxShadow: "0 2px 8px rgba(55,67,117,.05)" }}
+              style={{ backgroundColor: "#ffffff", border: "1px solid rgba(17,17,17,.08)", boxShadow: "0 2px 8px rgba(17,17,17,.05)" }}
             >
-              <p className="text-xl font-bold" style={{ color: "#374375" }}>{highlights.length}</p>
-              <p className="text-xs font-semibold mt-0.5" style={{ color: "rgba(55,67,117,.55)" }}>✦ Highlights</p>
+              <p className="text-3xl font-bold" style={{ color: "#111111" }}>{highlights.length}</p>
+              <p className="text-base font-semibold mt-0.5 flex items-center gap-1.5" style={{ color: "rgba(17,17,17,.55)" }}>
+                <Sparkles size={15} /> Highlights
+              </p>
             </div>
             <div
               className="rounded-xl px-4 py-3 flex items-center gap-3"
-              style={{ backgroundColor: "#ffffff", border: "1px solid rgba(55,67,117,.08)", boxShadow: "0 2px 8px rgba(55,67,117,.05)" }}
+              style={{ backgroundColor: "#ffffff", border: "1px solid rgba(17,17,17,.08)", boxShadow: "0 2px 8px rgba(17,17,17,.05)" }}
             >
               <div>
                 <div className="flex items-center gap-1.5">
                   {liveSessions > 0 && (
-                    <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: "#895159" }} />
+                    <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: "#111111" }} />
                   )}
-                  <p className="text-xl font-bold" style={{ color: "#374375" }}>{liveSessions}</p>
+                  <p className="text-3xl font-bold" style={{ color: "#111111" }}>{liveSessions}</p>
                 </div>
-                <p className="text-xs font-semibold mt-0.5" style={{ color: "rgba(55,67,117,.55)" }}>Live Now</p>
+                <p className="text-base font-semibold mt-0.5" style={{ color: "rgba(17,17,17,.55)" }}>Live Now</p>
               </div>
             </div>
           </div>
 
           {/* ── quick start ───────────────────────────────────────── */}
           <div className="mb-5">
-            <p className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: "rgba(55,67,117,.55)" }}>
+            <p className="text-sm font-bold uppercase tracking-widest mb-3" style={{ color: "rgba(17,17,17,.55)" }}>
               QUICK START
             </p>
             <div className="grid grid-cols-6 gap-2">
@@ -237,20 +243,20 @@ export default function SessionsPage() {
                     onClick={() => { setPreselectedType(st.value); setNewOpen(true); }}
                     className="flex flex-col items-center gap-2 p-4 rounded-xl transition-all text-center"
                     style={{
-                      backgroundColor: isSelected ? "rgba(55,67,117,.06)" : "#ffffff",
-                      border: isSelected ? "1px solid rgba(55,67,117,.20)" : "1px solid rgba(55,67,117,.08)",
-                      boxShadow: "0 2px 8px rgba(55,67,117,.05)",
+                      backgroundColor: isSelected ? "rgba(17,17,17,.06)" : "#ffffff",
+                      border: isSelected ? "1px solid rgba(17,17,17,.20)" : "1px solid rgba(17,17,17,.08)",
+                      boxShadow: "0 2px 8px rgba(17,17,17,.05)",
                     }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 4px 16px rgba(55,67,117,.10)"; }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 2px 8px rgba(55,67,117,.05)"; }}
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 4px 16px rgba(17,17,17,.10)"; }}
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 2px 8px rgba(17,17,17,.05)"; }}
                   >
                     <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-                      style={{ backgroundColor: tc.bg }}
+                      className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{ backgroundColor: tc.bg, color: "#111111" }}
                     >
-                      {tc.emoji}
+                      <tc.Icon size={20} />
                     </div>
-                    <p className="text-[11px] font-bold" style={{ color: "#374375" }}>{st.label}</p>
+                    <p className="text-sm font-bold" style={{ color: "#111111" }}>{st.label}</p>
                   </button>
                 );
               })}
@@ -262,10 +268,10 @@ export default function SessionsPage() {
             <div className="flex gap-1.5 flex-wrap">
               <button
                 onClick={() => setActiveType("all")}
-                className="px-3 py-1.5 rounded-xl text-xs font-bold transition-all"
+                className="px-3 py-1.5 rounded-xl text-base font-bold transition-all"
                 style={{
-                  backgroundColor: activeType === "all" ? "#374375" : "transparent",
-                  color: activeType === "all" ? "#ffffff" : "rgba(55,67,117,.55)",
+                  backgroundColor: activeType === "all" ? "#111111" : "transparent",
+                  color: activeType === "all" ? "#ffffff" : "rgba(17,17,17,.55)",
                 }}
               >
                 All
@@ -274,10 +280,10 @@ export default function SessionsPage() {
                 <button
                   key={st.value}
                   onClick={() => setActiveType(st.value)}
-                  className="px-3 py-1.5 rounded-xl text-xs font-bold transition-all"
+                  className="px-3 py-1.5 rounded-xl text-base font-bold transition-all"
                   style={{
-                    backgroundColor: activeType === st.value ? "#374375" : "transparent",
-                    color: activeType === st.value ? "#ffffff" : "rgba(55,67,117,.55)",
+                    backgroundColor: activeType === st.value ? "#111111" : "transparent",
+                    color: activeType === st.value ? "#ffffff" : "rgba(17,17,17,.55)",
                   }}
                 >
                   {st.label}
@@ -285,13 +291,13 @@ export default function SessionsPage() {
               ))}
             </div>
             <div className="relative">
-              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "rgba(55,67,117,.40)" }} />
+              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "rgba(17,17,17,.40)" }} />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search sessions…"
-                className="pl-8 pr-3 py-1.5 rounded-xl text-sm outline-none"
-                style={{ backgroundColor: "#ffffff", border: "1px solid rgba(55,67,117,.10)", color: "#374375", width: "180px" }}
+                className="pl-8 pr-3 py-1.5 rounded-xl text-lg outline-none"
+                style={{ backgroundColor: "#ffffff", border: "1px solid rgba(17,17,17,.10)", color: "#111111", width: "180px" }}
               />
             </div>
           </div>
@@ -299,25 +305,25 @@ export default function SessionsPage() {
           {/* ── session list ──────────────────────────────────────── */}
           {loading ? (
             <div className="flex justify-center py-20">
-              <div className="w-6 h-6 rounded-full border-2 animate-spin" style={{ borderColor: "#374375", borderTopColor: "transparent" }} />
+              <div className="w-6 h-6 rounded-full border-2 animate-spin" style={{ borderColor: "#111111", borderTopColor: "transparent" }} />
             </div>
           ) : filtered.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-24 text-center">
-              <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 text-3xl" style={{ backgroundColor: "rgba(55,67,117,.08)" }}>
-                🎙️
+              <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: "rgba(17,17,17,.08)", color: "#111111" }}>
+                <Mic size={30} />
               </div>
-              <h3 className="font-['Yeseva_One'] text-2xl font-bold mb-2" style={{ color: "#374375" }}>
+              <h3 className="font-['Yeseva_One'] text-4xl font-bold mb-2" style={{ color: "#111111" }}>
                 No sessions yet
               </h3>
-              <p className="text-sm font-medium mb-6" style={{ color: "rgba(55,67,117,.55)" }}>
+              <p className="text-lg font-medium mb-6" style={{ color: "rgba(17,17,17,.55)" }}>
                 Start your first session to capture notes and conversations.
               </p>
               <button
                 onClick={() => setNewOpen(true)}
-                className="px-5 py-2.5 rounded-2xl text-sm font-bold text-white transition-all"
-                style={{ backgroundColor: "#374375" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#2A3562"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#374375"; }}
+                className="px-5 py-2.5 rounded-2xl text-lg font-bold text-white transition-all"
+                style={{ backgroundColor: "#111111" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#000000"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#111111"; }}
               >
                 Start first session
               </button>
@@ -327,8 +333,8 @@ export default function SessionsPage() {
               {grouped.map(({ label, sessions: groupSessions }) => (
                 <div key={label}>
                   <p
-                    className="text-[10px] font-bold uppercase tracking-widest mb-2 px-1"
-                    style={{ color: "rgba(55,67,117,.45)" }}
+                    className="text-sm font-bold uppercase tracking-widest mb-2 px-1"
+                    style={{ color: "rgba(17,17,17,.45)" }}
                   >
                     {label}
                   </p>
@@ -345,45 +351,45 @@ export default function SessionsPage() {
                           className="group flex items-center gap-4 px-4 py-3 rounded-xl cursor-pointer transition-all"
                           style={{
                             backgroundColor: "#ffffff",
-                            border: "1px solid rgba(55,67,117,.08)",
-                            boxShadow: "0 2px 8px rgba(55,67,117,.05)",
+                            border: "1px solid rgba(17,17,17,.08)",
+                            boxShadow: "0 2px 8px rgba(17,17,17,.05)",
                           }}
                           onMouseEnter={(e) => {
-                            (e.currentTarget as HTMLElement).style.boxShadow = "0 6px 20px rgba(55,67,117,.10)";
+                            (e.currentTarget as HTMLElement).style.boxShadow = "0 6px 20px rgba(17,17,17,.10)";
                             (e.currentTarget as HTMLElement).style.transform = "translateY(-1px)";
                           }}
                           onMouseLeave={(e) => {
-                            (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 8px rgba(55,67,117,.05)";
+                            (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 8px rgba(17,17,17,.05)";
                             (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
                           }}
                         >
                           {/* icon */}
                           <div
-                            className="w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-                            style={{ backgroundColor: tc.bg }}
+                            className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                            style={{ backgroundColor: tc.bg, color: "#111111" }}
                           >
-                            {tc.emoji}
+                            <tc.Icon size={20} />
                           </div>
 
                           {/* info */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-0.5">
-                              <p className="font-bold text-sm truncate" style={{ color: "#374375" }}>
+                              <p className="font-bold text-lg truncate" style={{ color: "#111111" }}>
                                 {s.title}
                               </p>
                               {isActive && (
                                 <span
-                                  className="text-[9px] font-bold px-2 py-0.5 rounded-full text-white flex-shrink-0"
-                                  style={{ backgroundColor: "#895159" }}
+                                  className="text-xs font-bold px-2 py-0.5 rounded-full text-white flex-shrink-0"
+                                  style={{ backgroundColor: "#111111" }}
                                 >
                                   LIVE
                                 </span>
                               )}
                             </div>
-                            <div className="flex items-center gap-1.5 text-xs" style={{ color: "rgba(55,67,117,.55)" }}>
+                            <div className="flex items-center gap-1.5 text-base" style={{ color: "rgba(17,17,17,.55)" }}>
                               <span
-                                className="px-1.5 py-0.5 rounded-full text-[10px] font-bold"
-                                style={{ backgroundColor: "rgba(55,67,117,.08)", color: "#374375" }}
+                                className="px-1.5 py-0.5 rounded-full text-sm font-bold"
+                                style={{ backgroundColor: "rgba(17,17,17,.08)", color: "#111111" }}
                               >
                                 {typeLabel}
                               </span>
@@ -403,10 +409,10 @@ export default function SessionsPage() {
 
                           {/* duration + date */}
                           <div className="text-right flex-shrink-0">
-                            <p className="text-sm font-bold" style={{ color: "#374375" }}>
+                            <p className="text-lg font-bold" style={{ color: "#111111" }}>
                               {formatDuration(s.started_at, s.ended_at, s.duration_seconds)}
                             </p>
-                            <p className="text-xs" style={{ color: "rgba(55,67,117,.55)" }}>
+                            <p className="text-base" style={{ color: "rgba(17,17,17,.55)" }}>
                               {new Date(s.started_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                             </p>
                           </div>
@@ -416,8 +422,8 @@ export default function SessionsPage() {
                             <button
                               onClick={(e) => { e.stopPropagation(); handleClick(s); }}
                               className="p-1.5 rounded-lg transition-all opacity-0 group-hover:opacity-100"
-                              style={{ color: "rgba(55,67,117,.55)" }}
-                              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(55,67,117,.08)"; }}
+                              style={{ color: "rgba(17,17,17,.55)" }}
+                              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(17,17,17,.08)"; }}
                               onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; }}
                             >
                               {isActive ? <Play size={14} /> : <ArrowRight size={14} />}
@@ -426,9 +432,9 @@ export default function SessionsPage() {
                               onClick={(e) => handleDelete(e, s.id)}
                               disabled={deletingId === s.id}
                               className="p-1.5 rounded-lg transition-all opacity-0 group-hover:opacity-100"
-                              style={{ color: "rgba(55,67,117,.55)" }}
-                              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#895159"; }}
-                              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(55,67,117,.55)"; }}
+                              style={{ color: "rgba(17,17,17,.55)" }}
+                              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#111111"; }}
+                              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(17,17,17,.55)"; }}
                             >
                               <Trash2 size={14} />
                             </button>

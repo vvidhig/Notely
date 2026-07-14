@@ -1,8 +1,6 @@
 ﻿import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import { getNotionDatabases } from "../services/api";
-import type { SessionType, SessionMode, NotionDatabase } from "../types";
+import type { SessionType, SessionMode } from "../types";
 import { SESSION_TYPES } from "../constants/sessionTypes";
 import { Mic, MessageSquare, X } from "lucide-react";
 
@@ -12,9 +10,9 @@ interface Props {
 
 const INPUT_STYLE: React.CSSProperties = {
   background: "#F8FAFC",
-  border: "1px solid rgba(55,67,117,.12)",
+  border: "1px solid rgba(17,17,17,.12)",
   borderRadius: "14px",
-  color: "#374375",
+  color: "#111111",
   fontFamily: "Quicksand, sans-serif",
   fontSize: "0.875rem",
   fontWeight: 500,
@@ -25,36 +23,22 @@ const INPUT_STYLE: React.CSSProperties = {
 };
 
 function focusStyle(e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) {
-  e.currentTarget.style.borderColor = "#374375";
-  e.currentTarget.style.boxShadow   = "0 0 0 3px rgba(55,67,117,.12)";
+  e.currentTarget.style.borderColor = "#111111";
+  e.currentTarget.style.boxShadow   = "0 0 0 3px rgba(17,17,17,.12)";
 }
 function blurStyle(e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) {
-  e.currentTarget.style.borderColor = "rgba(55,67,117,.12)";
+  e.currentTarget.style.borderColor = "rgba(17,17,17,.12)";
   e.currentTarget.style.boxShadow   = "none";
 }
 
 export default function NewSessionModal({ onClose }: Props) {
-  const { user } = useAuth();
   const navigate = useNavigate();
 
   const [title, setTitle]           = useState("");
   const [sessionType, setSessionType] = useState<SessionType>("custom");
   const [participants, setParticipants] = useState("");
   const [mode, setMode]             = useState<SessionMode>("quick_notes");
-  const [notionDbs, setNotionDbs]   = useState<NotionDatabase[]>([]);
-  const [selectedDbId, setSelectedDbId] = useState("");
-  const [loadingDbs, setLoadingDbs] = useState(false);
   const [starting, setStarting]     = useState(false);
-
-  useEffect(() => {
-    if (user?.notion_connected) {
-      setLoadingDbs(true);
-      getNotionDatabases()
-        .then((r) => { setNotionDbs(r.data); if (r.data.length > 0) setSelectedDbId(r.data[0].id); })
-        .catch(() => setNotionDbs([]))
-        .finally(() => setLoadingDbs(false));
-    }
-  }, [user?.notion_connected]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -72,7 +56,6 @@ export default function NewSessionModal({ onClose }: Props) {
         session_type: sessionType,
         participants: participants.trim() || undefined,
         mode,
-        notion_database_id: selectedDbId || undefined,
       },
     });
   };
@@ -80,29 +63,29 @@ export default function NewSessionModal({ onClose }: Props) {
   return (
     <div
       className="fixed inset-0 flex items-center justify-center z-50 p-4"
-      style={{ backgroundColor: "rgba(55,67,117,.25)", backdropFilter: "blur(8px)" }}
+      style={{ backgroundColor: "rgba(17,17,17,.25)", backdropFilter: "blur(8px)" }}
     >
       <div
         className="w-full max-w-lg max-h-[90vh] overflow-y-auto"
         style={{
           background: "#ffffff",
           borderRadius: "28px",
-          border: "1px solid rgba(55,67,117,.08)",
-          boxShadow: "0 24px 64px rgba(55,67,117,.15)",
+          border: "1px solid rgba(17,17,17,.08)",
+          boxShadow: "0 24px 64px rgba(17,17,17,.15)",
         }}
       >
         {/* Header */}
         <div
           className="flex items-center justify-between px-6 py-5"
-          style={{ borderBottom: "1px solid rgba(55,67,117,.06)" }}
+          style={{ borderBottom: "1px solid rgba(17,17,17,.06)" }}
         >
-          <h2 className="font-['Yeseva_One'] text-3xl font-bold" style={{ color: "#374375" }}>
+          <h2 className="font-['Yeseva_One'] text-3xl font-bold" style={{ color: "#111111" }}>
             Start New Session
           </h2>
           <button
             onClick={onClose}
             className="w-8 h-8 flex items-center justify-center rounded-xl transition-all hover:scale-110"
-            style={{ backgroundColor: "rgba(55,67,117,.08)", color: "rgba(55,67,117,.55)" }}
+            style={{ backgroundColor: "rgba(17,17,17,.08)", color: "rgba(17,17,17,.55)" }}
           >
             <X size={16} />
           </button>
@@ -112,7 +95,7 @@ export default function NewSessionModal({ onClose }: Props) {
         <form onSubmit={handleSubmit} className="px-6 py-5 space-y-5">
           {/* Title */}
           <div>
-            <label className="text-[10px] font-bold uppercase tracking-widest mb-1.5 block" style={{ color: "rgba(55,67,117,.55)" }}>
+            <label className="text-sm font-bold uppercase tracking-widest mb-1.5 block" style={{ color: "rgba(17,17,17,.55)" }}>
               Session title
             </label>
             <input
@@ -127,7 +110,7 @@ export default function NewSessionModal({ onClose }: Props) {
 
           {/* Session type */}
           <div>
-            <label className="text-[10px] font-bold uppercase tracking-widest mb-2 block" style={{ color: "rgba(55,67,117,.55)" }}>
+            <label className="text-sm font-bold uppercase tracking-widest mb-2 block" style={{ color: "rgba(17,17,17,.55)" }}>
               Session type
             </label>
             <div className="grid grid-cols-3 gap-2">
@@ -139,14 +122,14 @@ export default function NewSessionModal({ onClose }: Props) {
                     onClick={() => setSessionType(t.value)}
                     className="px-3 py-2.5 text-left transition-all"
                     style={{
-                      background: selected ? "rgba(55,67,117,.08)" : "#F8FAFC",
-                      border: selected ? "2px solid #374375" : "1px solid rgba(55,67,117,.08)",
+                      background: selected ? "rgba(17,17,17,.08)" : "#F8FAFC",
+                      border: selected ? "2px solid #111111" : "1px solid rgba(17,17,17,.08)",
                       borderRadius: "14px",
-                      boxShadow: selected ? "0 0 0 3px rgba(55,67,117,.10)" : "none",
+                      boxShadow: selected ? "0 0 0 3px rgba(17,17,17,.10)" : "none",
                     }}
                   >
-                    <div className="text-lg mb-0.5">{t.emoji}</div>
-                    <div className="text-xs font-bold" style={{ color: selected ? "#374375" : "rgba(55,67,117,.55)" }}>
+                    <div className="mb-1" style={{ color: "#111111" }}><t.icon size={22} /></div>
+                    <div className="text-base font-bold" style={{ color: selected ? "#111111" : "rgba(17,17,17,.55)" }}>
                       {t.label}
                     </div>
                   </button>
@@ -157,7 +140,7 @@ export default function NewSessionModal({ onClose }: Props) {
 
           {/* Participants */}
           <div>
-            <label className="text-[10px] font-bold uppercase tracking-widest mb-1.5 block" style={{ color: "rgba(55,67,117,.55)" }}>
+            <label className="text-sm font-bold uppercase tracking-widest mb-1.5 block" style={{ color: "rgba(17,17,17,.55)" }}>
               Participants <span className="font-medium normal-case tracking-normal">comma-separated, optional</span>
             </label>
             <input
@@ -171,7 +154,7 @@ export default function NewSessionModal({ onClose }: Props) {
 
           {/* Mode */}
           <div>
-            <label className="text-[10px] font-bold uppercase tracking-widest mb-2 block" style={{ color: "rgba(55,67,117,.55)" }}>
+            <label className="text-sm font-bold uppercase tracking-widest mb-2 block" style={{ color: "rgba(17,17,17,.55)" }}>
               Recording mode
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -179,87 +162,64 @@ export default function NewSessionModal({ onClose }: Props) {
                 type="button" onClick={() => setMode("quick_notes")}
                 className="px-4 py-3 flex items-center gap-2.5 transition-all"
                 style={{
-                  background: mode === "quick_notes" ? "rgba(55,67,117,.05)" : "#F8FAFC",
-                  border: mode === "quick_notes" ? "2px solid #374375" : "1px solid rgba(55,67,117,.08)",
+                  background: mode === "quick_notes" ? "rgba(17,17,17,.05)" : "#F8FAFC",
+                  border: mode === "quick_notes" ? "2px solid #111111" : "1px solid rgba(17,17,17,.08)",
                   borderRadius: "14px",
                 }}
               >
-                <Mic size={16} style={{ color: "#374375" }} />
+                <Mic size={16} style={{ color: "#111111" }} />
                 <div className="text-left">
-                  <div className="text-sm font-bold" style={{ color: "#374375" }}>Quick Notes</div>
-                  <div className="text-[10px] font-medium" style={{ color: "rgba(55,67,117,.55)" }}>Short clips + text</div>
+                  <div className="text-lg font-bold" style={{ color: "#111111" }}>Quick Notes</div>
+                  <div className="text-sm font-medium" style={{ color: "rgba(17,17,17,.55)" }}>Short clips + text</div>
                 </div>
               </button>
               <button
                 type="button" onClick={() => setMode("record_conversation")}
                 className="px-4 py-3 flex items-center gap-2.5 transition-all"
                 style={{
-                  background: mode === "record_conversation" ? "rgba(55,67,117,.05)" : "#F8FAFC",
-                  border: mode === "record_conversation" ? "2px solid #374375" : "1px solid rgba(55,67,117,.08)",
+                  background: mode === "record_conversation" ? "rgba(17,17,17,.05)" : "#F8FAFC",
+                  border: mode === "record_conversation" ? "2px solid #111111" : "1px solid rgba(17,17,17,.08)",
                   borderRadius: "14px",
                 }}
               >
-                <MessageSquare size={16} style={{ color: "#895159" }} />
+                <MessageSquare size={16} style={{ color: "#111111" }} />
                 <div className="text-left">
-                  <div className="text-sm font-bold" style={{ color: "#374375" }}>Conversation</div>
-                  <div className="text-[10px] font-medium" style={{ color: "rgba(55,67,117,.55)" }}>Full audio recording</div>
+                  <div className="text-lg font-bold" style={{ color: "#111111" }}>Conversation</div>
+                  <div className="text-sm font-medium" style={{ color: "rgba(17,17,17,.55)" }}>Full audio recording</div>
                 </div>
               </button>
             </div>
           </div>
 
-          {/* Notion */}
-          {user?.notion_connected && (
-            <div>
-              <label className="text-[10px] font-bold uppercase tracking-widest mb-1.5 block" style={{ color: "rgba(55,67,117,.55)" }}>
-                Notion database <span className="font-medium normal-case tracking-normal">optional</span>
-              </label>
-              {loadingDbs ? (
-                <p className="text-xs font-medium py-1" style={{ color: "rgba(55,67,117,.55)" }}>Loading databases…</p>
-              ) : notionDbs.length > 0 ? (
-                <select
-                  value={selectedDbId} onChange={(e) => setSelectedDbId(e.target.value)}
-                  style={INPUT_STYLE}
-                  onFocus={focusStyle} onBlur={blurStyle}
-                >
-                  <option value="">No sync</option>
-                  {notionDbs.map((db) => <option key={db.id} value={db.id}>{db.title}</option>)}
-                </select>
-              ) : (
-                <p className="text-xs font-medium py-1" style={{ color: "rgba(55,67,117,.55)" }}>No databases found.</p>
-              )}
-            </div>
-          )}
-
           {/* Footer buttons */}
           <div className="flex gap-3 pt-1">
             <button
               type="button" onClick={onClose}
-              className="flex-1 py-2.5 font-bold text-sm transition-all"
+              className="flex-1 py-2.5 font-bold text-lg transition-all"
               style={{
                 background: "#F8FAFC",
-                border: "1px solid rgba(55,67,117,.10)",
+                border: "1px solid rgba(17,17,17,.10)",
                 borderRadius: "14px",
-                color: "rgba(55,67,117,.55)",
+                color: "rgba(17,17,17,.55)",
               }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(55,67,117,.05)"; }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(17,17,17,.05)"; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#F8FAFC"; }}
             >
               Cancel
             </button>
             <button
               type="submit" disabled={starting || !title.trim()}
-              className="flex-1 py-2.5 font-bold text-sm text-white transition-all disabled:opacity-50"
+              className="flex-1 py-2.5 font-bold text-lg text-white transition-all disabled:opacity-50"
               style={{
-                background: "#374375",
+                background: "#111111",
                 borderRadius: "14px",
-                boxShadow: "0 4px 14px rgba(55,67,117,.20)",
+                boxShadow: "0 4px 14px rgba(17,17,17,.20)",
               }}
               onMouseEnter={(e) => {
                 if (!starting && title.trim())
-                  (e.currentTarget as HTMLButtonElement).style.background = "#2A3562";
+                  (e.currentTarget as HTMLButtonElement).style.background = "#000000";
               }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#374375"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#111111"; }}
             >
               {starting ? "Starting…" : "Start Session"}
             </button>

@@ -9,7 +9,7 @@ import type { Session, Note, Tag, SessionMode, ChatMessage, Highlight } from "..
 import { SESSION_TYPES } from "../constants/sessionTypes";
 import {
   Mic, MicOff, Send, Sparkles, Square, Trash2, BookOpen, Plus, Check, X,
-  MessageSquare, ChevronDown, Pencil,
+  MessageSquare, ChevronDown, Pencil, Bot, StickyNote, ClipboardList, BarChart3,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { useTextHighlight } from "../hooks/useTextHighlight";
@@ -19,7 +19,7 @@ import HighlightToolbar from "../components/HighlightToolbar";
 import HighlightSidePanel from "../components/HighlightSidePanel";
 import TaskModal from "../components/TaskModal";
 
-const PRESET_COLORS = ["#6366f1", "#ef4444", "#10b981", "#f59e0b", "#8b5cf6", "#f97316", "#06b6d4", "#ec4899"];
+const PRESET_COLORS = ["#111111", "#333333", "#555555", "#777777", "#222222", "#444444", "#666666", "#888888"];
 const fmtTimer = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, "0")}`;
 
 /* ── Helper: render note content with yellow highlight spans ────────── */
@@ -43,7 +43,7 @@ function renderWithHighlights(
         key={h.id}
         onClick={(e) => { e.stopPropagation(); onClick(h); }}
         style={{
-          backgroundColor: "rgba(255,220,50,.55)",
+          backgroundColor: "rgba(17,17,17,.14)",
           color: "inherit",
           cursor: "pointer",
           borderRadius: 3,
@@ -51,7 +51,7 @@ function renderWithHighlights(
         }}
       >
         {content.slice(start, end)}
-        {h.note && <span style={{ fontSize: "0.65em", marginLeft: 2 }}>📝</span>}
+        {h.note && <StickyNote size={11} style={{ display: "inline", marginLeft: 2, verticalAlign: "baseline" }} />}
       </mark>,
     );
     last = end;
@@ -385,29 +385,27 @@ export default function SessionPage() {
 
   return (
     <div className="h-[100dvh] flex flex-col" style={{
-      backgroundColor: "#FDF5F7",
-      backgroundImage: "radial-gradient(rgba(139,38,62,.09) 1.5px, transparent 1.5px)",
-      backgroundSize: "28px 28px",
-      color: "#292800",
+      backgroundColor: "#FFFFFF",
+      color: "#111111",
     }}>
       {/* Header */}
       <header
         className="flex-shrink-0 px-5 py-3 flex items-center gap-3"
-        style={{ backgroundColor: "#8B263E" }}
+        style={{ backgroundColor: "#111111" }}
       >
         <BookOpen size={18} style={{ color: "rgba(255,255,255,.70)" }} className="flex-shrink-0" />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="font-['Yeseva_One'] text-lg font-bold truncate text-white">
+            <span className="font-['Yeseva_One'] text-2xl font-bold truncate text-white">
               {session?.title || "Loading…"}
             </span>
             {typeConfig && (
-              <span className="text-xs font-semibold flex-shrink-0" style={{ color: "rgba(255,255,255,.60)" }}>
-                {typeConfig.emoji} {typeConfig.label}
+              <span className="text-base font-semibold flex-shrink-0 inline-flex items-center gap-1.5" style={{ color: "rgba(255,255,255,.60)" }}>
+                <typeConfig.icon size={15} /> {typeConfig.label}
               </span>
             )}
             {userNoteCount > 0 && (
-              <span className="text-xs font-semibold flex-shrink-0" style={{ color: "rgba(255,255,255,.60)" }}>
+              <span className="text-base font-semibold flex-shrink-0" style={{ color: "rgba(255,255,255,.60)" }}>
                 · {userNoteCount} notes
               </span>
             )}
@@ -418,7 +416,7 @@ export default function SessionPage() {
         <div className="relative flex-shrink-0">
           <button
             onClick={() => setShowModeMenu((v) => !v)}
-            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full font-bold transition-all"
+            className="flex items-center gap-1.5 text-base px-3 py-1.5 rounded-full font-bold transition-all"
             style={{
               backgroundColor: "rgba(255,255,255,.15)",
               border: "1px solid rgba(255,255,255,.25)",
@@ -436,24 +434,24 @@ export default function SessionPage() {
               className="absolute top-full right-0 mt-1 rounded-2xl z-20 overflow-hidden w-44"
               style={{
                 background: "#ffffff",
-                border: "1px solid rgba(139,38,62,.12)",
-                boxShadow: "0 8px 24px rgba(139,38,62,.15)",
+                border: "1px solid rgba(17,17,17,.12)",
+                boxShadow: "0 8px 24px rgba(17,17,17,.15)",
               }}
             >
               <button
                 onClick={() => handleSwitchMode("quick_notes")}
-                className="w-full text-left px-4 py-3 text-sm flex items-center gap-2 font-semibold transition-all"
-                style={{ color: isQuickNotes ? "#8B263E" : "#292800" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(139,38,62,.06)"; }}
+                className="w-full text-left px-4 py-3 text-lg flex items-center gap-2 font-semibold transition-all"
+                style={{ color: isQuickNotes ? "#111111" : "#111111" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(17,17,17,.06)"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
               >
                 <Mic size={14} /> Quick Notes
               </button>
               <button
                 onClick={() => handleSwitchMode("record_conversation")}
-                className="w-full text-left px-4 py-3 text-sm flex items-center gap-2 font-semibold transition-all"
-                style={{ color: !isQuickNotes ? "#8B263E" : "#292800" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(139,38,62,.06)"; }}
+                className="w-full text-left px-4 py-3 text-lg flex items-center gap-2 font-semibold transition-all"
+                style={{ color: !isQuickNotes ? "#111111" : "#111111" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(17,17,17,.06)"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
               >
                 <MessageSquare size={14} /> Conversation
@@ -465,7 +463,7 @@ export default function SessionPage() {
         <button
           onClick={handleEndSession}
           disabled={ending || !session}
-          className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all disabled:opacity-40"
+          className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-base font-bold transition-all disabled:opacity-40"
           style={{
             backgroundColor: "rgba(255,255,255,.12)",
             border: "1px solid rgba(255,255,255,.30)",
@@ -483,15 +481,15 @@ export default function SessionPage() {
         <div
           className="flex-shrink-0 px-4 py-2 flex items-center gap-2 overflow-x-auto"
           style={{
-            backgroundColor: "rgba(139,38,62,.04)",
-            borderBottom: "1px solid rgba(139,38,62,.08)",
+            backgroundColor: "rgba(17,17,17,.04)",
+            borderBottom: "1px solid rgba(17,17,17,.08)",
           }}
         >
           {activeTag && (
             <button
               onClick={() => setActiveTag(null)}
-              className="flex-shrink-0 text-xs flex items-center gap-1 pr-1 font-semibold transition-all"
-              style={{ color: "#8B263E" }}
+              className="flex-shrink-0 text-base flex items-center gap-1 pr-1 font-semibold transition-all"
+              style={{ color: "#111111" }}
             >
               <X size={12} /> Clear
             </button>
@@ -500,7 +498,7 @@ export default function SessionPage() {
             <button
               key={tag.id}
               onClick={() => setActiveTag(activeTag === tag.name ? null : tag.name)}
-              className="flex-shrink-0 text-xs px-3 py-1 rounded-full border transition-all font-bold"
+              className="flex-shrink-0 text-base px-3 py-1 rounded-full border transition-all font-bold"
               style={{
                 backgroundColor: tag.color + (activeTag === tag.name ? "33" : "18"),
                 color: tag.color,
@@ -516,11 +514,11 @@ export default function SessionPage() {
               <input
                 autoFocus type="text" value={newTagName} onChange={(e) => setNewTagName(e.target.value)}
                 placeholder="Tag name"
-                className="text-xs rounded-full px-3 py-1 w-24 focus:outline-none font-medium"
+                className="text-base rounded-full px-3 py-1 w-24 focus:outline-none font-medium"
                 style={{
                   background: "white",
-                  border: "1px solid rgba(139,38,62,.20)",
-                  color: "#292800",
+                  border: "1px solid rgba(17,17,17,.20)",
+                  color: "#111111",
                 }}
               />
               <div className="flex gap-1">
@@ -535,19 +533,19 @@ export default function SessionPage() {
                     }} />
                 ))}
               </div>
-              <button type="submit" style={{ color: "#8B263E" }}><Check size={14} /></button>
-              <button type="button" onClick={() => setShowNewTag(false)} style={{ color: "#94A3B8" }}><X size={14} /></button>
+              <button type="submit" style={{ color: "#111111" }}><Check size={14} /></button>
+              <button type="button" onClick={() => setShowNewTag(false)} style={{ color: "#8A8A8A" }}><X size={14} /></button>
             </form>
           ) : (
             <button
               onClick={() => setShowNewTag(true)}
-              className="flex-shrink-0 text-xs px-2.5 py-1 rounded-full flex items-center gap-1 font-bold transition-all"
+              className="flex-shrink-0 text-base px-2.5 py-1 rounded-full flex items-center gap-1 font-bold transition-all"
               style={{
-                border: "1px dashed rgba(139,38,62,.30)",
-                color: "#8B263E",
+                border: "1px dashed rgba(17,17,17,.30)",
+                color: "#111111",
               }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#8B263E"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(139,38,62,.30)"; }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#111111"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(17,17,17,.30)"; }}
             >
               <Plus size={10} /> Tag
             </button>
@@ -560,27 +558,25 @@ export default function SessionPage() {
         ref={timelineRef}
         className="flex-1 overflow-y-auto px-5 py-5 space-y-4"
         style={{
-          backgroundColor: "#FDF5F7",
-          backgroundImage: "radial-gradient(rgba(139,38,62,.07) 1.5px, transparent 1.5px)",
-          backgroundSize: "28px 28px",
+          backgroundColor: "#FFFFFF",
         }}
       >
         {notes.length === 0 && !transcribing && !cProcessing && (
           <div className="text-center py-20">
-            <div className="text-5xl mb-3">{isQuickNotes ? "🎤" : "🎙️"}</div>
+            <div className="mb-3 flex justify-center" style={{ color: "#111111" }}><Mic size={44} /></div>
             {isQuickNotes ? (
               <>
-                <p className="font-['Yeseva_One'] text-2xl font-semibold" style={{ color: "#8B263E" }}>
+                <p className="font-['Yeseva_One'] text-4xl font-semibold" style={{ color: "#111111" }}>
                   Tap the mic or type a note
                 </p>
                 {tags.length > 0 && (
-                  <p className="text-xs mt-1 font-medium" style={{ color: "#94A3B8" }}>
+                  <p className="text-base mt-1 font-medium" style={{ color: "#8A8A8A" }}>
                     Select a tag before recording to categorize it
                   </p>
                 )}
               </>
             ) : (
-              <p className="font-['Yeseva_One'] text-2xl font-semibold" style={{ color: "#8B263E" }}>
+              <p className="font-['Yeseva_One'] text-4xl font-semibold" style={{ color: "#111111" }}>
                 Tap Record to capture a conversation
               </p>
             )}
@@ -653,15 +649,15 @@ export default function SessionPage() {
             <div
               className="max-w-[78%] rounded-[28px] px-5 py-3.5 shadow-md"
               style={{
-                backgroundColor: "rgba(139,38,62,.08)",
-                border: "1px solid rgba(139,38,62,.15)",
+                backgroundColor: "rgba(17,17,17,.08)",
+                border: "1px solid rgba(17,17,17,.15)",
               }}
             >
-              <p className="text-sm animate-pulse font-medium" style={{ color: "#8B263E" }}>🎤 Transcribing…</p>
+              <p className="text-lg animate-pulse font-medium" style={{ color: "#111111" }}>Transcribing…</p>
             </div>
             <div
-              className="w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold shadow-md border-2 border-white/50 text-white"
-              style={{ backgroundColor: "#8B263E" }}
+              className="w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center text-base font-bold shadow-md border-2 border-white/50 text-white"
+              style={{ backgroundColor: "#111111" }}
             >
               Me
             </div>
@@ -670,19 +666,19 @@ export default function SessionPage() {
         {manualSuggesting && (
           <div className="flex items-end gap-3">
             <div
-              className="w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center text-xl shadow-md border-2 border-white"
-              style={{ backgroundColor: "rgba(120,104,37,.10)" }}
+              className="w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center shadow-md border-2 border-white"
+              style={{ backgroundColor: "rgba(17,17,17,.10)", color: "#111111" }}
             >
-              🤖
+              <Bot size={22} />
             </div>
             <div
               className="max-w-[78%] rounded-[28px] px-5 py-3.5 shadow-md"
               style={{
                 backgroundColor: "white",
-                border: "1px solid rgba(120,104,37,.15)",
+                border: "1px solid rgba(17,17,17,.15)",
               }}
             >
-              <p className="text-sm animate-pulse font-medium" style={{ color: "#786825" }}>Generating suggestion…</p>
+              <p className="text-lg animate-pulse font-medium" style={{ color: "#111111" }}>Generating suggestion…</p>
             </div>
           </div>
         )}
@@ -692,12 +688,12 @@ export default function SessionPage() {
           <div
             className="rounded-2xl px-5 py-4 mx-2 shadow-sm"
             style={{
-              backgroundColor: "rgba(139,38,62,.06)",
-              border: "1px solid rgba(139,38,62,.12)",
+              backgroundColor: "rgba(17,17,17,.06)",
+              border: "1px solid rgba(17,17,17,.12)",
             }}
           >
-            <p className="text-sm animate-pulse font-semibold" style={{ color: "#8B263E" }}>
-              {cProcessing === "transcribing" ? "⏳ Transcribing audio…" : "🤖 Identifying speakers and analyzing…"}
+            <p className="text-lg animate-pulse font-semibold" style={{ color: "#111111" }}>
+              {cProcessing === "transcribing" ? "Transcribing audio…" : "Identifying speakers and analyzing…"}
             </p>
           </div>
         )}
@@ -706,11 +702,11 @@ export default function SessionPage() {
       {/* Error */}
       {error && (
         <div
-          className="flex-shrink-0 mx-4 mb-2 text-sm px-4 py-2 rounded-xl flex items-center justify-between font-medium"
+          className="flex-shrink-0 mx-4 mb-2 text-lg px-4 py-2 rounded-xl flex items-center justify-between font-medium"
           style={{
-            backgroundColor: "rgba(139,38,62,.06)",
-            border: "1px solid rgba(139,38,62,.18)",
-            color: "#8B263E",
+            backgroundColor: "rgba(17,17,17,.06)",
+            border: "1px solid rgba(17,17,17,.18)",
+            color: "#111111",
           }}
         >
           <span>{error}</span>
@@ -723,8 +719,8 @@ export default function SessionPage() {
       {/* Active tag indicator */}
       {isQuickNotes && activeTag && (
         <div className="flex-shrink-0 px-4 pb-1">
-          <p className="text-xs font-semibold" style={{ color: "#94A3B8" }}>
-            Next note tagged: <span className="font-bold" style={{ color: "#8B263E" }}>{activeTag}</span>
+          <p className="text-base font-semibold" style={{ color: "#8A8A8A" }}>
+            Next note tagged: <span className="font-bold" style={{ color: "#111111" }}>{activeTag}</span>
           </p>
         </div>
       )}
@@ -734,7 +730,7 @@ export default function SessionPage() {
         className="flex-shrink-0 px-4 py-3"
         style={{
           backgroundColor: "white",
-          borderTop: "1px solid rgba(139,38,62,.08)",
+          borderTop: "1px solid rgba(17,17,17,.08)",
         }}
       >
         {isQuickNotes ? (
@@ -749,12 +745,12 @@ export default function SessionPage() {
                     : "w-11"
                 }`}
                 style={!qRecording ? {
-                  backgroundColor: "rgba(139,38,62,.10)",
-                  color: "#8B263E",
+                  backgroundColor: "rgba(17,17,17,.10)",
+                  color: "#111111",
                 } : {}}
               >
                 {qRecording
-                  ? <><MicOff size={16} /><span className="text-sm font-mono">{fmtTimer(qSeconds)}</span></>
+                  ? <><MicOff size={16} /><span className="text-lg font-mono">{fmtTimer(qSeconds)}</span></>
                   : <Mic size={18} />}
               </button>
               <input
@@ -763,18 +759,18 @@ export default function SessionPage() {
                 onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && !qRecording && handleSendText()}
                 placeholder={qRecording ? "Recording…" : "Type a note…"}
                 disabled={qRecording || sending}
-                className="flex-1 rounded-xl px-4 py-2.5 text-sm disabled:opacity-50 font-medium focus:outline-none"
+                className="flex-1 rounded-xl px-4 py-2.5 text-lg disabled:opacity-50 font-medium focus:outline-none"
                 style={{
-                  backgroundColor: "rgba(139,38,62,.05)",
-                  border: "1px solid rgba(139,38,62,.12)",
-                  color: "#292800",
+                  backgroundColor: "rgba(17,17,17,.05)",
+                  border: "1px solid rgba(17,17,17,.12)",
+                  color: "#111111",
                 }}
                 onFocus={e => {
-                  e.currentTarget.style.borderColor = "#8B263E";
-                  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(139,38,62,.10)";
+                  e.currentTarget.style.borderColor = "#111111";
+                  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(17,17,17,.10)";
                 }}
                 onBlur={e => {
-                  e.currentTarget.style.borderColor = "rgba(139,38,62,.12)";
+                  e.currentTarget.style.borderColor = "rgba(17,17,17,.12)";
                   e.currentTarget.style.boxShadow = "none";
                 }}
               />
@@ -782,9 +778,9 @@ export default function SessionPage() {
                 onClick={handleSendText}
                 disabled={!textInput.trim() || qRecording || sending || !session}
                 className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all disabled:opacity-30 text-white"
-                style={{ backgroundColor: "#8B263E" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "#6B1C2E"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "#8B263E"; }}
+                style={{ backgroundColor: "#111111" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "#000000"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "#111111"; }}
               >
                 <Send size={15} />
               </button>
@@ -793,18 +789,18 @@ export default function SessionPage() {
                 disabled={manualSuggesting || qRecording || userNoteCount === 0}
                 className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all disabled:opacity-30"
                 style={{
-                  backgroundColor: "rgba(120,104,37,.10)",
-                  border: "1px solid rgba(120,104,37,.18)",
+                  backgroundColor: "rgba(17,17,17,.10)",
+                  border: "1px solid rgba(17,17,17,.18)",
                 }}
                 title="Get AI suggestion"
               >
-                <Sparkles size={15} style={{ color: "#786825" }} />
+                <Sparkles size={15} style={{ color: "#111111" }} />
               </button>
             </div>
-            <p className="text-xs mt-2 text-center font-medium" style={{ color: "#94A3B8" }}>
+            <p className="text-base mt-2 text-center font-medium" style={{ color: "#8A8A8A" }}>
               {qRecording
-                ? `🔴 Recording ${fmtTimer(qSeconds)} — tap mic to stop`
-                : "Tap mic · Enter to send · ✨ for AI suggestions"}
+                ? `Recording ${fmtTimer(qSeconds)} — tap mic to stop`
+                : "Tap mic · Enter to send · Sparkles for AI suggestions"}
             </p>
           </>
         ) : (
@@ -815,30 +811,30 @@ export default function SessionPage() {
               disabled={!!cProcessing || !session}
               className={`w-20 h-20 rounded-full flex flex-col items-center justify-center gap-1 transition-all disabled:opacity-40 ${
                 cRecording
-                  ? "bg-red-500 hover:bg-red-600 ring-8 ring-red-400/20 scale-105 text-white"
+                  ? "bg-black hover:bg-neutral-800 ring-8 ring-black/10 scale-105 text-white"
                   : ""
               }`}
               style={!cRecording ? {
-                backgroundColor: "rgba(139,38,62,.10)",
-                border: "2px solid rgba(139,38,62,.20)",
-                color: "#8B263E",
+                backgroundColor: "rgba(17,17,17,.10)",
+                border: "2px solid rgba(17,17,17,.20)",
+                color: "#111111",
               } : {}}
             >
               {cRecording ? (
                 <>
                   <Square size={22} />
-                  <span className="text-xs font-mono">{fmtTimer(cSeconds)}</span>
+                  <span className="text-base font-mono">{fmtTimer(cSeconds)}</span>
                 </>
               ) : (
                 <>
                   <Mic size={24} />
-                  <span className="text-xs font-semibold">Record</span>
+                  <span className="text-base font-semibold">Record</span>
                 </>
               )}
             </button>
-            <p className="text-xs font-semibold" style={{ color: "#94A3B8" }}>
+            <p className="text-base font-semibold" style={{ color: "#8A8A8A" }}>
               {cProcessing
-                ? (cProcessing === "transcribing" ? "⏳ Transcribing…" : "🤖 Analyzing…")
+                ? (cProcessing === "transcribing" ? "Transcribing…" : "Analyzing…")
                 : cRecording ? "Tap to stop and process" : "Tap to record a conversation chunk"}
             </p>
           </div>
@@ -848,8 +844,8 @@ export default function SessionPage() {
       {/* Toast */}
       {toast && (
         <div
-          className="fixed bottom-24 left-1/2 -translate-x-1/2 text-sm px-5 py-2.5 rounded-full shadow-xl z-50 whitespace-nowrap font-semibold text-white"
-          style={{ backgroundColor: "#292800" }}
+          className="fixed bottom-24 left-1/2 -translate-x-1/2 text-lg px-5 py-2.5 rounded-full shadow-xl z-50 whitespace-nowrap font-semibold text-white"
+          style={{ backgroundColor: "#111111" }}
         >
           {toast}
         </div>
@@ -958,39 +954,39 @@ function ConversationChat({ speakerNotes, sessionId }: { speakerNotes: Note[]; s
   return (
     <div
       className="mx-1 mt-1 mb-3 rounded-2xl overflow-hidden shadow-sm"
-      style={{ border: "1px solid rgba(139,38,62,.12)" }}
+      style={{ border: "1px solid rgba(17,17,17,.12)" }}
     >
       <button
         onClick={() => setIsOpen((v) => !v)}
         className="w-full flex items-center justify-between px-4 py-3 transition-all"
-        style={{ backgroundColor: "rgba(139,38,62,.06)" }}
-        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(139,38,62,.10)"; }}
-        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(139,38,62,.06)"; }}
+        style={{ backgroundColor: "rgba(17,17,17,.06)" }}
+        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(17,17,17,.10)"; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(17,17,17,.06)"; }}
       >
-        <span className="flex items-center gap-2 text-sm font-bold" style={{ color: "#8B263E" }}>
+        <span className="flex items-center gap-2 text-lg font-bold" style={{ color: "#111111" }}>
           <MessageSquare size={13} />
           Ask about this conversation
           {messages.length > 0 && (
             <span
-              className="text-xs font-semibold px-2 py-0.5 rounded-full"
+              className="text-base font-semibold px-2 py-0.5 rounded-full"
               style={{
-                color: "#786825",
-                backgroundColor: "rgba(120,104,37,.10)",
-                border: "1px solid rgba(120,104,37,.18)",
+                color: "#111111",
+                backgroundColor: "rgba(17,17,17,.10)",
+                border: "1px solid rgba(17,17,17,.18)",
               }}
             >
               {(messages.length / 2) | 0} Q&A
             </span>
           )}
         </span>
-        <ChevronDown size={13} style={{ color: "#94A3B8" }}
+        <ChevronDown size={13} style={{ color: "#8A8A8A" }}
           className={`transition-transform ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
       {isOpen && (
-        <div style={{ backgroundColor: "#ffffff", borderTop: "1px solid rgba(139,38,62,.08)" }}>
+        <div style={{ backgroundColor: "#ffffff", borderTop: "1px solid rgba(17,17,17,.08)" }}>
           {messages.length === 0 && !loading && (
-            <p className="text-xs px-4 pt-3 pb-1 font-medium" style={{ color: "#94A3B8" }}>
+            <p className="text-base px-4 pt-3 pb-1 font-medium" style={{ color: "#8A8A8A" }}>
               Ask anything about what was said, who said it, or what to do next.
             </p>
           )}
@@ -1003,32 +999,33 @@ function ConversationChat({ speakerNotes, sessionId }: { speakerNotes: Note[]; s
                     <div
                       className="rounded-xl px-3 py-2 max-w-[85%] shadow-sm"
                       style={{
-                        backgroundColor: "rgba(139,38,62,.08)",
-                        border: "1px solid rgba(139,38,62,.12)",
+                        backgroundColor: "rgba(17,17,17,.08)",
+                        border: "1px solid rgba(17,17,17,.12)",
                       }}
                     >
-                      <p className="text-sm font-medium" style={{ color: "#292800" }}>{msg.content}</p>
+                      <p className="text-lg font-medium" style={{ color: "#111111" }}>{msg.content}</p>
                     </div>
                   </div>
                 ) : (
                   <div key={i} className="flex justify-start gap-2 items-start">
                     <div
-                      className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 text-xs"
+                      className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
                       style={{
-                        backgroundColor: "rgba(120,104,37,.10)",
-                        border: "1px solid rgba(120,104,37,.18)",
+                        backgroundColor: "rgba(17,17,17,.10)",
+                        border: "1px solid rgba(17,17,17,.18)",
+                        color: "#111111",
                       }}
                     >
-                      🤖
+                      <Bot size={13} />
                     </div>
                     <div
                       className="rounded-xl px-3 py-2 max-w-[85%] shadow-sm"
                       style={{
-                        backgroundColor: "rgba(120,104,37,.07)",
-                        border: "1px solid rgba(120,104,37,.15)",
+                        backgroundColor: "rgba(17,17,17,.07)",
+                        border: "1px solid rgba(17,17,17,.15)",
                       }}
                     >
-                      <p className="text-sm leading-relaxed font-medium" style={{ color: "#292800" }}>{msg.content}</p>
+                      <p className="text-lg leading-relaxed font-medium" style={{ color: "#111111" }}>{msg.content}</p>
                     </div>
                   </div>
                 )
@@ -1036,22 +1033,23 @@ function ConversationChat({ speakerNotes, sessionId }: { speakerNotes: Note[]; s
               {loading && (
                 <div className="flex justify-start gap-2 items-start">
                   <div
-                    className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 text-xs"
+                    className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
                     style={{
-                      backgroundColor: "rgba(120,104,37,.10)",
-                      border: "1px solid rgba(120,104,37,.18)",
+                      backgroundColor: "rgba(17,17,17,.10)",
+                      border: "1px solid rgba(17,17,17,.18)",
+                      color: "#111111",
                     }}
                   >
-                    🤖
+                    <Bot size={13} />
                   </div>
                   <div
                     className="rounded-xl px-3 py-2"
                     style={{
-                      backgroundColor: "rgba(120,104,37,.07)",
-                      border: "1px solid rgba(120,104,37,.15)",
+                      backgroundColor: "rgba(17,17,17,.07)",
+                      border: "1px solid rgba(17,17,17,.15)",
                     }}
                   >
-                    <p className="text-sm animate-pulse font-medium" style={{ color: "#786825" }}>Thinking…</p>
+                    <p className="text-lg animate-pulse font-medium" style={{ color: "#111111" }}>Thinking…</p>
                   </div>
                 </div>
               )}
@@ -1061,7 +1059,7 @@ function ConversationChat({ speakerNotes, sessionId }: { speakerNotes: Note[]; s
 
           <div
             className="flex items-center gap-2 px-3 py-2"
-            style={{ borderTop: "1px solid rgba(139,38,62,.08)" }}
+            style={{ borderTop: "1px solid rgba(17,17,17,.08)" }}
           >
             <input
               type="text"
@@ -1070,18 +1068,18 @@ function ConversationChat({ speakerNotes, sessionId }: { speakerNotes: Note[]; s
               onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
               placeholder="Ask a question about this conversation…"
               disabled={loading}
-              className="flex-1 rounded-xl px-3 py-2 text-sm font-medium disabled:opacity-50 focus:outline-none"
+              className="flex-1 rounded-xl px-3 py-2 text-lg font-medium disabled:opacity-50 focus:outline-none"
               style={{
-                backgroundColor: "rgba(139,38,62,.05)",
-                border: "1px solid rgba(139,38,62,.12)",
-                color: "#292800",
+                backgroundColor: "rgba(17,17,17,.05)",
+                border: "1px solid rgba(17,17,17,.12)",
+                color: "#111111",
               }}
               onFocus={e => {
-                e.currentTarget.style.borderColor = "#8B263E";
-                e.currentTarget.style.boxShadow = "0 0 0 3px rgba(139,38,62,.10)";
+                e.currentTarget.style.borderColor = "#111111";
+                e.currentTarget.style.boxShadow = "0 0 0 3px rgba(17,17,17,.10)";
               }}
               onBlur={e => {
-                e.currentTarget.style.borderColor = "rgba(139,38,62,.12)";
+                e.currentTarget.style.borderColor = "rgba(17,17,17,.12)";
                 e.currentTarget.style.boxShadow = "none";
               }}
             />
@@ -1089,9 +1087,9 @@ function ConversationChat({ speakerNotes, sessionId }: { speakerNotes: Note[]; s
               onClick={handleSend}
               disabled={!input.trim() || loading}
               className="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center transition-all disabled:opacity-30 text-white"
-              style={{ backgroundColor: "#8B263E" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "#6B1C2E"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "#8B263E"; }}
+              style={{ backgroundColor: "#111111" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "#000000"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.backgroundColor = "#111111"; }}
             >
               <Send size={13} />
             </button>
@@ -1138,22 +1136,22 @@ function NoteBubble({
         className="rounded-2xl p-4 mx-1 shadow-sm"
         style={{
           backgroundColor: "white",
-          border: "1px solid rgba(139,38,62,.12)",
+          border: "1px solid rgba(17,17,17,.12)",
         }}
       >
-        <p className="text-xs font-bold mb-3 flex items-center gap-1.5" style={{ color: "#8B263E" }}>
-          📋 Conversation Summary
+        <p className="text-base font-bold mb-3 flex items-center gap-1.5" style={{ color: "#111111" }}>
+          <ClipboardList size={15} /> Conversation Summary
         </p>
         <div className="space-y-2">
           {Object.entries(data).map(([key, items]) =>
             items && items.length > 0 ? (
               <div key={key}>
-                <p className="text-xs font-bold capitalize mb-1" style={{ color: "#94A3B8" }}>
+                <p className="text-base font-bold capitalize mb-1" style={{ color: "#8A8A8A" }}>
                   {key.replace(/_/g, " ")}
                 </p>
                 {items.map((item, i) => (
-                  <div key={i} className="flex gap-2 text-sm font-medium" style={{ color: "#292800" }}>
-                    <span style={{ color: "#D17484" }} className="flex-shrink-0">•</span>
+                  <div key={i} className="flex gap-2 text-lg font-medium" style={{ color: "#111111" }}>
+                    <span style={{ color: "#8A8A8A" }} className="flex-shrink-0">•</span>
                     <span>{item}</span>
                   </div>
                 ))}
@@ -1173,17 +1171,17 @@ function NoteBubble({
       <div
         className="rounded-2xl p-4 mx-1 shadow-sm"
         style={{
-          backgroundColor: "rgba(139,38,62,.05)",
-          border: "1px solid rgba(139,38,62,.12)",
+          backgroundColor: "rgba(17,17,17,.05)",
+          border: "1px solid rgba(17,17,17,.12)",
         }}
       >
-        <p className="text-xs font-bold mb-3 flex items-center gap-1.5" style={{ color: "#8B263E" }}>
-          📊 Key Evaluations
+        <p className="text-base font-bold mb-3 flex items-center gap-1.5" style={{ color: "#111111" }}>
+          <BarChart3 size={15} /> Key Evaluations
         </p>
         <div className="space-y-2">
           {evals.map((e, i) => (
-            <div key={i} className="flex gap-2 text-sm font-medium" style={{ color: "#292800" }}>
-              <span style={{ color: "#D17484" }} className="flex-shrink-0">•</span>
+            <div key={i} className="flex gap-2 text-lg font-medium" style={{ color: "#111111" }}>
+              <span style={{ color: "#8A8A8A" }} className="flex-shrink-0">•</span>
               <span>{e}</span>
             </div>
           ))}
@@ -1197,23 +1195,23 @@ function NoteBubble({
     return (
       <div className="flex items-end gap-3">
         <div
-          className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-xl shadow-md border-2 border-white"
-          style={{ backgroundColor: "rgba(120,104,37,.10)" }}
+          className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center shadow-md border-2 border-white"
+          style={{ backgroundColor: "rgba(17,17,17,.10)", color: "#111111" }}
         >
-          🤖
+          <Bot size={20} />
         </div>
         <div
           className="max-w-[78%] rounded-[28px] px-5 py-3.5 shadow-sm"
           style={{
             backgroundColor: "white",
-            border: "1px solid rgba(120,104,37,.15)",
+            border: "1px solid rgba(17,17,17,.15)",
           }}
         >
-          <p className="text-[11px] font-bold mb-1.5 tracking-wide" style={{ color: "#786825" }}>
+          <p className="text-sm font-bold mb-1.5 tracking-wide" style={{ color: "#111111" }}>
             AI Suggestion
           </p>
-          <p className="text-sm leading-relaxed font-medium" style={{ color: "#292800" }}>{note.content}</p>
-          <p className="text-[11px] mt-2 font-semibold" style={{ color: "#94A3B8" }}>
+          <p className="text-lg leading-relaxed font-medium" style={{ color: "#111111" }}>{note.content}</p>
+          <p className="text-sm mt-2 font-semibold" style={{ color: "#8A8A8A" }}>
             {new Date(note.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
           </p>
         </div>
@@ -1227,29 +1225,29 @@ function NoteBubble({
       <div
         className="max-w-[78%] rounded-[28px] px-5 py-3.5 shadow-sm"
         style={{
-          backgroundColor: "rgba(139,38,62,.09)",
-          border: "1px solid rgba(139,38,62,.16)",
+          backgroundColor: "rgba(17,17,17,.09)",
+          border: "1px solid rgba(17,17,17,.16)",
         }}
       >
         {note.tag && (
           <span
-            className="inline-block text-[10px] px-2 py-0.5 rounded-full font-bold mb-1.5"
+            className="inline-block text-sm px-2 py-0.5 rounded-full font-bold mb-1.5"
             style={{
-              backgroundColor: (tagColor ?? "#8B263E") + "22",
-              color: tagColor ?? "#8B263E",
-              border: `1px solid ${(tagColor ?? "#8B263E")}44`,
+              backgroundColor: (tagColor ?? "#111111") + "22",
+              color: tagColor ?? "#111111",
+              border: `1px solid ${(tagColor ?? "#111111")}44`,
             }}
           >
             {note.tag}
           </span>
         )}
         <div className="flex items-start gap-2">
-          <span className="text-base leading-none mt-0.5 flex-shrink-0">
-            {note.source === "voice" ? "🎤" : "✏️"}
+          <span className="leading-none mt-0.5 flex-shrink-0" style={{ color: "#111111" }}>
+            {note.source === "voice" ? <Mic size={16} /> : <Pencil size={16} />}
           </span>
           <p
-            className="text-sm leading-relaxed whitespace-pre-wrap font-semibold"
-            style={{ color: "#292800" }}
+            className="text-lg leading-relaxed whitespace-pre-wrap font-semibold"
+            style={{ color: "#111111" }}
             data-note-id={note.id}
           >
             {noteHighlights && noteHighlights.length > 0
@@ -1258,23 +1256,23 @@ function NoteBubble({
           </p>
         </div>
         <div className="flex items-center justify-end gap-2 mt-2">
-          <p className="text-[11px] font-semibold" style={{ color: "#8B263E" }}>
+          <p className="text-sm font-semibold" style={{ color: "#111111" }}>
             {new Date(note.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
           </p>
           <button
             onClick={() => onDelete(note.id)}
             className="opacity-0 group-hover:opacity-100 transition-all"
-            style={{ color: "#94A3B8" }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#8B263E"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#94A3B8"; }}
+            style={{ color: "#8A8A8A" }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#111111"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "#8A8A8A"; }}
           >
             <Trash2 size={11} />
           </button>
         </div>
       </div>
       <div
-        className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold shadow-md border-2 border-white/50 text-white"
-        style={{ backgroundColor: "#8B263E" }}
+        className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-base font-bold shadow-md border-2 border-white/50 text-white"
+        style={{ backgroundColor: "#111111" }}
       >
         Me
       </div>
@@ -1335,13 +1333,13 @@ function SpeakerBubble({
   const speakerIdx = speakerOrder.indexOf(note.speaker ?? "");
   const isP2 = speakerIdx === 1;
   const initial = (note.speaker ?? "?")[0].toUpperCase();
-  const bubbleBg = isP2 ? "#8B263E" : "#292800";
+  const bubbleBg = isP2 ? "#111111" : "#111111";
   const time = new Date(note.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
   const avatar = (
     <div
-      className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-sm font-bold shadow-md border-2 border-white/40 text-white"
-      style={{ backgroundColor: isP2 ? "#8B263E" : "#292800" }}
+      className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-lg font-bold shadow-md border-2 border-white/40 text-white"
+      style={{ backgroundColor: isP2 ? "#111111" : "#111111" }}
     >
       {initial}
     </div>
@@ -1357,7 +1355,7 @@ function SpeakerBubble({
         if (e.key === "Escape") handleCancel();
       }}
       rows={Math.max(3, editVal.split("\n").length)}
-      className="w-full text-sm leading-relaxed font-medium resize-none outline-none"
+      className="w-full text-lg leading-relaxed font-medium resize-none outline-none"
       style={{
         backgroundColor: "rgba(255,255,255,.12)",
         borderRadius: 8,
@@ -1369,7 +1367,7 @@ function SpeakerBubble({
     />
   ) : (
     <p
-      className="text-sm text-white leading-relaxed font-medium"
+      className="text-lg text-white leading-relaxed font-medium"
       data-note-id={note.id}
       style={{ textAlign: isP2 ? "right" : "left" }}
     >
@@ -1381,13 +1379,13 @@ function SpeakerBubble({
 
   const topRow = (
     <div className="flex items-center justify-between mb-1.5">
-      <p className={`text-[11px] text-white/55 font-bold tracking-wide ${isP2 ? "order-2" : ""}`}>
+      <p className={`text-sm text-white/55 font-bold tracking-wide ${isP2 ? "order-2" : ""}`}>
         {note.speaker ?? "Unknown"}
       </p>
       <div className={`flex items-center gap-1.5 ${isP2 ? "order-1" : ""}`}>
         {note.is_edited && (
           <span
-            className="text-[9px] font-bold px-1.5 py-0.5 rounded-full"
+            className="text-xs font-bold px-1.5 py-0.5 rounded-full"
             style={{ backgroundColor: "rgba(255,255,255,.10)", color: "rgba(255,255,255,.50)" }}
           >
             Edited
@@ -1395,7 +1393,7 @@ function SpeakerBubble({
         )}
         {reformatting && (
           <span
-            className="text-[9px] font-bold animate-pulse"
+            className="text-xs font-bold animate-pulse"
             style={{ color: "rgba(255,255,255,.50)" }}
           >
             Formatting…
@@ -1427,7 +1425,7 @@ function SpeakerBubble({
       {topRow}
       {contentArea}
       <p
-        className="text-[11px] text-white/45 mt-2 font-semibold"
+        className="text-sm text-white/45 mt-2 font-semibold"
         style={{ textAlign: isP2 ? "right" : "left" }}
       >
         {time}
@@ -1439,19 +1437,19 @@ function SpeakerBubble({
     <div className="flex gap-2 mt-1 px-1">
       <button
         onClick={handleSave}
-        className="text-xs font-bold px-3 py-1 rounded-full text-white transition-all"
-        style={{ backgroundColor: "#374375" }}
-        onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#2A3562"; }}
-        onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#374375"; }}
+        className="text-base font-bold px-3 py-1 rounded-full text-white transition-all"
+        style={{ backgroundColor: "#111111" }}
+        onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#000000"; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#111111"; }}
       >
-        ✓ Save
+        Save
       </button>
       <button
         onClick={handleCancel}
-        className="text-xs font-bold px-3 py-1 rounded-full transition-all"
-        style={{ color: "rgba(55,67,117,.55)", backgroundColor: "rgba(55,67,117,.08)" }}
+        className="text-base font-bold px-3 py-1 rounded-full transition-all"
+        style={{ color: "rgba(17,17,17,.55)", backgroundColor: "rgba(17,17,17,.08)" }}
       >
-        ✗ Cancel
+        Cancel
       </button>
     </div>
   );

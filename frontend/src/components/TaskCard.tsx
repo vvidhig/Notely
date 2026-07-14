@@ -39,9 +39,9 @@ export default function TaskCard({ task, onToggle, onDelete, onEdit, onDragStart
   const dateStatus = dueDateStatus(task.due_date, task.status);
 
   const dateColor =
-    dateStatus === "overdue" ? "#E75480" :
-    dateStatus === "today"   ? "#FF8A5B" :
-    "#94A3B8";
+    dateStatus === "overdue" ? "#111111" :
+    dateStatus === "today"   ? "#111111" :
+    "#8A8A8A";
 
   return (
     <div
@@ -49,10 +49,10 @@ export default function TaskCard({ task, onToggle, onDelete, onEdit, onDragStart
       style={{
         backgroundColor: done ? "transparent" : (cardBg ?? "#ffffff"),
         borderRadius: "14px",
-        border: done ? "1px solid transparent" : "1px solid rgba(13,59,102,.07)",
+        border: done ? "1px solid transparent" : "1px solid rgba(17,17,17,.07)",
         boxShadow: done
           ? "none"
-          : `inset 3px 0 0 ${cfg.color}66, ${hovering ? "0 4px 16px rgba(13,59,102,.10)" : "0 2px 8px rgba(13,59,102,.05)"}`,
+          : `inset 3px 0 0 ${cfg.color}66, ${hovering ? "0 4px 16px rgba(17,17,17,.10)" : "0 2px 8px rgba(17,17,17,.05)"}`,
         opacity: done ? 0.5 : 1,
         transition: "all 200ms ease",
       }}
@@ -64,7 +64,7 @@ export default function TaskCard({ task, onToggle, onDelete, onEdit, onDragStart
       {/* Drag handle */}
       <div
         className="flex-shrink-0 mt-0.5 transition-opacity"
-        style={{ color: "#94A3B8", opacity: hovering ? 1 : 0 }}
+        style={{ color: "#8A8A8A", opacity: hovering ? 1 : 0 }}
       >
         <GripVertical size={14} />
       </div>
@@ -74,19 +74,19 @@ export default function TaskCard({ task, onToggle, onDelete, onEdit, onDragStart
         onClick={(e) => { e.stopPropagation(); onToggle(task.id); }}
         className="flex-shrink-0 w-4 h-4 mt-0.5 rounded flex items-center justify-center transition-all"
         style={{
-          border: done ? `2px solid ${cfg.color}` : "2px solid rgba(13,59,102,.20)",
+          border: done ? `2px solid ${cfg.color}` : "2px solid rgba(17,17,17,.20)",
           backgroundColor: done ? cfg.color : "transparent",
         }}
       >
-        {done && <span className="text-white text-[9px] font-bold">✓</span>}
+        {done && <span className="text-white text-xs font-bold">✓</span>}
       </button>
 
       {/* Content */}
       <div className="flex-1 min-w-0" onClick={() => onEdit(task)}>
         <p
-          className="text-sm font-semibold leading-snug"
+          className="text-lg font-semibold leading-snug"
           style={{
-            color: done ? "#94A3B8" : "#0D3B66",
+            color: done ? "#8A8A8A" : "#111111",
             textDecoration: done ? "line-through" : "none",
           }}
         >
@@ -96,15 +96,15 @@ export default function TaskCard({ task, onToggle, onDelete, onEdit, onDragStart
         {!compact && (
           <div className="flex items-center gap-2 mt-1 flex-wrap">
             {task.due_date && (
-              <span className="flex items-center gap-1 text-xs font-semibold" style={{ color: dateColor }}>
+              <span className="flex items-center gap-1 text-base font-semibold" style={{ color: dateColor }}>
                 <Calendar size={10} />
                 {formatDate(task.due_date)}
-                {dateStatus === "overdue" && <span className="text-[9px]">· overdue</span>}
-                {dateStatus === "today"   && <span className="text-[9px]">· today</span>}
+                {dateStatus === "overdue" && <span className="text-xs">· overdue</span>}
+                {dateStatus === "today"   && <span className="text-xs">· today</span>}
               </span>
             )}
             {task.due_time && (
-              <span className="flex items-center gap-1 text-xs font-semibold" style={{ color: "#94A3B8" }}>
+              <span className="flex items-center gap-1 text-base font-semibold" style={{ color: "#8A8A8A" }}>
                 <Clock size={10} />
                 {formatTime(task.due_time)}
               </span>
@@ -112,7 +112,7 @@ export default function TaskCard({ task, onToggle, onDelete, onEdit, onDragStart
             {task.tags && task.tags.split(",").filter(Boolean).map((t) => (
               <span
                 key={t}
-                className="text-[10px] px-1.5 py-0.5 rounded-full font-semibold"
+                className="text-sm px-1.5 py-0.5 rounded-full font-semibold"
                 style={{ backgroundColor: cfg.badgeBg, color: cfg.badgeText }}
               >
                 {t.trim()}
@@ -127,11 +127,11 @@ export default function TaskCard({ task, onToggle, onDelete, onEdit, onDragStart
         onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}
         className="flex-shrink-0 p-0.5 rounded-lg transition-all"
         style={{
-          color: "#94A3B8",
+          color: "#8A8A8A",
           opacity: hovering ? 1 : 0,
         }}
-        onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#E75480"; }}
-        onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#94A3B8"; }}
+        onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#111111"; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#8A8A8A"; }}
       >
         <Trash2 size={13} />
       </button>

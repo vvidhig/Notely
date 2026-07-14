@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Home, CheckSquare, Mic, Star, CalendarDays, ExternalLink, LogOut, Menu, X } from "lucide-react";
+import { Home, CheckSquare, Mic, Star, CalendarDays, LogOut, Menu, X } from "lucide-react";
 
 const NAV = [
   { to: "/dashboard",  icon: Home,         label: "Home"       },
@@ -66,7 +66,7 @@ export default function Sidebar() {
           <rect x="21" y="20" width="14" height="3" rx="1.5" fill="white"/>
           <rect x="21" y="27" width="10" height="3" rx="1.5" fill="white"/>
         </svg>
-        <span className="font-['Yeseva_One'] text-2xl font-bold text-white tracking-wide">Notely</span>
+        <span className="font-['Yeseva_One'] text-4xl font-bold text-white tracking-wide">Notely</span>
       </div>
 
       {/* Nav links */}
@@ -76,7 +76,7 @@ export default function Sidebar() {
             key={to}
             to={to}
             onClick={() => setMobileOpen(false)}
-            className="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all"
+            className="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-lg font-semibold transition-all"
             style={({ isActive }) => ({
               backgroundColor: isActive ? "rgba(255,255,255,.12)" : "transparent",
               color: isActive ? "#ffffff" : "rgba(255,255,255,.60)",
@@ -87,7 +87,7 @@ export default function Sidebar() {
                 {isActive && (
                   <span
                     className="absolute left-0 top-2 bottom-2 rounded-r-full"
-                    style={{ width: "3px", backgroundColor: "#BABDE2" }}
+                    style={{ width: "3px", backgroundColor: "#8A8A8A" }}
                   />
                 )}
                 <Icon size={17} />
@@ -97,32 +97,6 @@ export default function Sidebar() {
           </NavLink>
         ))}
 
-        <div className="pt-3 mt-2" style={{ borderTop: "1px solid rgba(255,255,255,.10)" }}>
-          {user?.notion_connected && (
-            <NavLink
-              to="/notion/setup"
-              onClick={() => setMobileOpen(false)}
-              className="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all"
-              style={({ isActive }) => ({
-                backgroundColor: isActive ? "rgba(255,255,255,.12)" : "transparent",
-                color: isActive ? "#ffffff" : "rgba(255,255,255,.60)",
-              })}
-            >
-              {({ isActive }) => (
-                <>
-                  {isActive && (
-                    <span
-                      className="absolute left-0 top-2 bottom-2 rounded-r-full"
-                      style={{ width: "3px", backgroundColor: "#BABDE2" }}
-                    />
-                  )}
-                  <ExternalLink size={17} />
-                  Notion
-                </>
-              )}
-            </NavLink>
-          )}
-        </div>
       </nav>
 
       {/* Focus Streak */}
@@ -130,11 +104,11 @@ export default function Sidebar() {
         className="mx-3 mb-3 px-3 py-3 rounded-xl"
         style={{ backgroundColor: "rgba(255,255,255,.07)", border: "1px solid rgba(255,255,255,.10)" }}
       >
-        <p className="text-[9px] font-bold uppercase tracking-widest mb-1.5" style={{ color: "rgba(255,255,255,.45)" }}>
+        <p className="text-xs font-bold uppercase tracking-widest mb-1.5" style={{ color: "rgba(255,255,255,.45)" }}>
           Focus Streak
         </p>
-        <p className="text-2xl font-bold text-white leading-none mb-2">
-          {streak} <span className="text-sm font-semibold" style={{ color: "rgba(255,255,255,.60)" }}>days</span>
+        <p className="text-4xl font-bold text-white leading-none mb-2">
+          {streak} <span className="text-lg font-semibold" style={{ color: "rgba(255,255,255,.60)" }}>days</span>
         </p>
         <div className="flex gap-1">
           {DAYS.map((d, i) => (
@@ -148,7 +122,7 @@ export default function Sidebar() {
                   backgroundColor: activeDays[i] ? "rgba(255,255,255,.75)" : "rgba(255,255,255,.15)",
                 }}
               />
-              <span className="text-[8px] font-bold" style={{ color: "rgba(255,255,255,.40)" }}>{d}</span>
+              <span className="text-xs font-bold" style={{ color: "rgba(255,255,255,.40)" }}>{d}</span>
             </div>
           ))}
         </div>
@@ -156,12 +130,12 @@ export default function Sidebar() {
 
       {/* User + logout */}
       <div className="px-4 py-4" style={{ borderTop: "1px solid rgba(255,255,255,.10)" }}>
-        <p className="text-xs font-semibold mb-2 px-1 truncate" style={{ color: "rgba(255,255,255,.40)" }}>
+        <p className="text-base font-semibold mb-2 px-1 truncate" style={{ color: "rgba(255,255,255,.40)" }}>
           {user?.email}
         </p>
         <button
           onClick={() => { logout(); navigate("/"); }}
-          className="flex items-center gap-2 text-sm px-3 py-2 rounded-xl w-full font-semibold transition-all"
+          className="flex items-center gap-2 text-lg px-3 py-2 rounded-xl w-full font-semibold transition-all"
           style={{ color: "rgba(255,255,255,.50)" }}
           onMouseEnter={(e) => {
             (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(255,255,255,.08)";
@@ -183,7 +157,7 @@ export default function Sidebar() {
       {/* Desktop sidebar */}
       <aside
         className="hidden md:flex flex-col w-56 flex-shrink-0 h-[100dvh] sticky top-0"
-        style={{ backgroundColor: "#374375" }}
+        style={{ backgroundColor: "#111111" }}
       >
         {content}
       </aside>
@@ -192,7 +166,7 @@ export default function Sidebar() {
       <button
         onClick={() => setMobileOpen(true)}
         className="md:hidden fixed top-4 left-4 z-40 w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg"
-        style={{ backgroundColor: "#374375" }}
+        style={{ backgroundColor: "#111111" }}
       >
         <Menu size={18} />
       </button>
@@ -200,9 +174,9 @@ export default function Sidebar() {
       {/* Mobile overlay */}
       {mobileOpen && (
         <div className="md:hidden fixed inset-0 z-50 flex">
-          <div className="w-56 h-full flex flex-col" style={{ backgroundColor: "#374375" }}>
+          <div className="w-56 h-full flex flex-col" style={{ backgroundColor: "#111111" }}>
             <div className="flex items-center justify-between px-5 py-4">
-              <span className="font-['Yeseva_One'] text-2xl font-bold text-white">Notely</span>
+              <span className="font-['Yeseva_One'] text-4xl font-bold text-white">Notely</span>
               <button onClick={() => setMobileOpen(false)} style={{ color: "rgba(255,255,255,.60)" }}>
                 <X size={20} />
               </button>

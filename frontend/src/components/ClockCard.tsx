@@ -17,22 +17,22 @@ export default function ClockCard() {
     <div
       className="rounded-[20px] px-4 py-3 flex items-center justify-between gap-3"
       style={{
-        background: "#374375",
-        boxShadow: "0 8px 24px rgba(55,67,117,.35)",
+        background: "#111111",
+        boxShadow: "0 8px 24px rgba(17,17,17,.35)",
       }}
     >
       <div>
-        <p className="text-[9px] text-white/45 font-bold uppercase tracking-widest mb-1">
+        <p className="text-xs text-white/45 font-bold uppercase tracking-widest mb-1">
           Current time
         </p>
         <div className="flex items-end gap-1">
           <span className="font-mono text-4xl font-bold text-white tracking-tight leading-none">
             {h}:{m}
           </span>
-          <span className="font-mono text-base font-bold text-white/40 leading-none mb-0.5">:{s}</span>
-          <span className="text-[10px] font-bold text-white/45 mb-0.5 ml-0.5">{isPM ? "PM" : "AM"}</span>
+          <span className="font-mono text-xl font-bold text-white/40 leading-none mb-0.5">:{s}</span>
+          <span className="text-sm font-bold text-white/45 mb-0.5 ml-0.5">{isPM ? "PM" : "AM"}</span>
         </div>
-        <p className="text-[10px] text-white/50 font-semibold mt-1">
+        <p className="text-sm text-white/50 font-semibold mt-1">
           {now.toLocaleDateString("en-US", {
             weekday: "long", month: "long", day: "numeric", year: "numeric",
           })}

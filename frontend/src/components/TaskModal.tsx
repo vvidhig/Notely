@@ -25,9 +25,9 @@ interface Props {
 
 const INPUT_STYLE = {
   background: "#F8FAFC",
-  border: "1px solid rgba(55,67,117,.12)",
+  border: "1px solid rgba(17,17,17,.12)",
   borderRadius: "14px",
-  color: "#374375",
+  color: "#111111",
   fontFamily: "Quicksand, sans-serif",
   fontSize: "0.875rem",
   fontWeight: 500,
@@ -43,12 +43,12 @@ function Input({ style, ...props }: React.InputHTMLAttributes<HTMLInputElement>)
       {...props}
       style={{ ...INPUT_STYLE, ...style }}
       onFocus={(e) => {
-        e.currentTarget.style.borderColor = "#374375";
-        e.currentTarget.style.boxShadow = "0 0 0 3px rgba(55,67,117,.12)";
+        e.currentTarget.style.borderColor = "#111111";
+        e.currentTarget.style.boxShadow = "0 0 0 3px rgba(17,17,17,.12)";
         props.onFocus?.(e);
       }}
       onBlur={(e) => {
-        e.currentTarget.style.borderColor = "rgba(55,67,117,.12)";
+        e.currentTarget.style.borderColor = "rgba(17,17,17,.12)";
         e.currentTarget.style.boxShadow = "none";
         props.onBlur?.(e);
       }}
@@ -62,11 +62,11 @@ function Textarea({ style, ...props }: React.TextareaHTMLAttributes<HTMLTextArea
       {...props}
       style={{ ...INPUT_STYLE, resize: "none", ...style }}
       onFocus={(e) => {
-        e.currentTarget.style.borderColor = "#374375";
-        e.currentTarget.style.boxShadow = "0 0 0 3px rgba(55,67,117,.12)";
+        e.currentTarget.style.borderColor = "#111111";
+        e.currentTarget.style.boxShadow = "0 0 0 3px rgba(17,17,17,.12)";
       }}
       onBlur={(e) => {
-        e.currentTarget.style.borderColor = "rgba(55,67,117,.12)";
+        e.currentTarget.style.borderColor = "rgba(17,17,17,.12)";
         e.currentTarget.style.boxShadow = "none";
       }}
     />
@@ -75,7 +75,7 @@ function Textarea({ style, ...props }: React.TextareaHTMLAttributes<HTMLTextArea
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: "rgba(55,67,117,.55)" }}>
+    <p className="text-sm font-bold uppercase tracking-widest mb-1.5" style={{ color: "rgba(17,17,17,.55)" }}>
       {children}
     </p>
   );
@@ -132,29 +132,29 @@ export default function TaskModal({
   return (
     <div
       className="fixed inset-0 flex items-center justify-center z-50 p-4"
-      style={{ backgroundColor: "rgba(55,67,117,.25)", backdropFilter: "blur(8px)" }}
+      style={{ backgroundColor: "rgba(17,17,17,.25)", backdropFilter: "blur(8px)" }}
     >
       <div
         className="w-full max-w-lg flex flex-col max-h-[90vh]"
         style={{
           background: "#ffffff",
           borderRadius: "28px",
-          border: "1px solid rgba(55,67,117,.08)",
-          boxShadow: "0 24px 64px rgba(55,67,117,.15)",
+          border: "1px solid rgba(17,17,17,.08)",
+          boxShadow: "0 24px 64px rgba(17,17,17,.15)",
         }}
       >
         {/* Header */}
         <div
           className="flex items-center justify-between px-6 py-5 flex-shrink-0"
-          style={{ borderBottom: "1px solid rgba(55,67,117,.06)" }}
+          style={{ borderBottom: "1px solid rgba(17,17,17,.06)" }}
         >
-          <h2 className="font-['Yeseva_One'] text-2xl font-bold" style={{ color: "#374375" }}>
+          <h2 className="font-['Yeseva_One'] text-4xl font-bold" style={{ color: "#111111" }}>
             {task ? "Edit Task" : "New Task"}
           </h2>
           <button
             onClick={onClose}
             className="w-8 h-8 flex items-center justify-center rounded-xl transition-all hover:scale-110"
-            style={{ backgroundColor: "rgba(55,67,117,.08)", color: "rgba(55,67,117,.55)" }}
+            style={{ backgroundColor: "rgba(17,17,17,.08)", color: "rgba(17,17,17,.55)" }}
           >
             <X size={16} />
           </button>
@@ -180,7 +180,7 @@ export default function TaskModal({
               {/* What to do */}
               <div>
                 <FieldLabel>
-                  What to do <span style={{ color: "rgba(55,67,117,.55)" }} className="font-medium normal-case tracking-normal">optional</span>
+                  What to do <span style={{ color: "rgba(17,17,17,.55)" }} className="font-medium normal-case tracking-normal">optional</span>
                 </FieldLabel>
                 <Textarea
                   value={description}
@@ -196,16 +196,16 @@ export default function TaskModal({
                   type="button"
                   onClick={() => setShowExecution(!showExecution)}
                   className="flex items-center gap-1.5 mb-1.5 transition-all"
-                  style={{ color: showExecution ? "#374375" : "rgba(55,67,117,.50)" }}
+                  style={{ color: showExecution ? "#111111" : "rgba(17,17,17,.50)" }}
                 >
                   <ChevronRight
                     size={12}
                     style={{ transform: showExecution ? "rotate(90deg)" : "rotate(0deg)", transition: "transform 200ms" }}
                   />
-                  <span className="text-[10px] font-bold uppercase tracking-widest">
+                  <span className="text-sm font-bold uppercase tracking-widest">
                     How to execute
                   </span>
-                  <span className="text-[10px] font-medium" style={{ color: "rgba(55,67,117,.55)" }}>optional</span>
+                  <span className="text-sm font-medium" style={{ color: "rgba(17,17,17,.55)" }}>optional</span>
                 </button>
                 {showExecution && (
                   <Textarea
@@ -226,32 +226,32 @@ export default function TaskModal({
                 <div className="grid grid-cols-2 gap-2">
                   <div className="relative">
                     <CalendarDays size={13} className="absolute left-3 top-1/2 -translate-y-1/2"
-                      style={{ color: "rgba(55,67,117,.55)" }} />
+                      style={{ color: "rgba(17,17,17,.55)" }} />
                     <input type="date" value={dueDate}
                       onChange={(e) => setDueDate(e.target.value)}
                       style={{ ...INPUT_STYLE, paddingLeft: "32px" }}
                       onFocus={(e) => {
-                        e.currentTarget.style.borderColor = "#374375";
-                        e.currentTarget.style.boxShadow = "0 0 0 3px rgba(55,67,117,.12)";
+                        e.currentTarget.style.borderColor = "#111111";
+                        e.currentTarget.style.boxShadow = "0 0 0 3px rgba(17,17,17,.12)";
                       }}
                       onBlur={(e) => {
-                        e.currentTarget.style.borderColor = "rgba(55,67,117,.12)";
+                        e.currentTarget.style.borderColor = "rgba(17,17,17,.12)";
                         e.currentTarget.style.boxShadow = "none";
                       }}
                     />
                   </div>
                   <div className="relative">
                     <Clock size={13} className="absolute left-3 top-1/2 -translate-y-1/2"
-                      style={{ color: "rgba(55,67,117,.55)" }} />
+                      style={{ color: "rgba(17,17,17,.55)" }} />
                     <input type="time" value={dueTime}
                       onChange={(e) => setDueTime(e.target.value)}
                       style={{ ...INPUT_STYLE, paddingLeft: "32px" }}
                       onFocus={(e) => {
-                        e.currentTarget.style.borderColor = "#374375";
-                        e.currentTarget.style.boxShadow = "0 0 0 3px rgba(55,67,117,.12)";
+                        e.currentTarget.style.borderColor = "#111111";
+                        e.currentTarget.style.boxShadow = "0 0 0 3px rgba(17,17,17,.12)";
                       }}
                       onBlur={(e) => {
-                        e.currentTarget.style.borderColor = "rgba(55,67,117,.12)";
+                        e.currentTarget.style.borderColor = "rgba(17,17,17,.12)";
                         e.currentTarget.style.boxShadow = "none";
                       }}
                     />
@@ -274,12 +274,12 @@ export default function TaskModal({
                         type="button"
                         onClick={() => setReminderMinutes(value)}
                         disabled={disabled}
-                        className="py-2 px-2 text-[10px] font-bold transition-all"
+                        className="py-2 px-2 text-sm font-bold transition-all"
                         style={{
                           borderRadius: "12px",
-                          border: active ? "2px solid #374375" : "1px solid rgba(55,67,117,.10)",
-                          backgroundColor: active ? "#374375" : disabled ? "#F8FAFC" : "#F8FAFC",
-                          color: active ? "#ffffff" : disabled ? "rgba(55,67,117,.30)" : "rgba(55,67,117,.55)",
+                          border: active ? "2px solid #111111" : "1px solid rgba(17,17,17,.10)",
+                          backgroundColor: active ? "#111111" : disabled ? "#F8FAFC" : "#F8FAFC",
+                          color: active ? "#ffffff" : disabled ? "rgba(17,17,17,.30)" : "rgba(17,17,17,.55)",
                           cursor: disabled ? "not-allowed" : "pointer",
                         }}
                       >
@@ -291,12 +291,12 @@ export default function TaskModal({
                   })}
                 </div>
                 {!hasSchedule && (
-                  <p className="text-[10px] font-medium mt-1.5" style={{ color: "rgba(55,67,117,.50)" }}>
+                  <p className="text-sm font-medium mt-1.5" style={{ color: "rgba(17,17,17,.50)" }}>
                     Set a date or time to enable reminders
                   </p>
                 )}
                 {hasSchedule && reminderMinutes !== null && (
-                  <p className="text-[10px] font-semibold mt-1.5 flex items-center gap-1" style={{ color: "#374375" }}>
+                  <p className="text-sm font-semibold mt-1.5 flex items-center gap-1" style={{ color: "#111111" }}>
                     <Bell size={9} />
                     Notified {reminderMinutes === 60 ? "1 hour" : `${reminderMinutes} min`} before
                     {dueTime ? ` at ${formatTimeLabel(dueTime)}` : ""}.
@@ -322,19 +322,19 @@ export default function TaskModal({
         {/* Footer */}
         <div
           className="flex gap-3 px-6 py-4 flex-shrink-0"
-          style={{ borderTop: "1px solid rgba(55,67,117,.06)" }}
+          style={{ borderTop: "1px solid rgba(17,17,17,.06)" }}
         >
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-2.5 font-bold text-sm transition-all"
+            className="flex-1 py-2.5 font-bold text-lg transition-all"
             style={{
               background: "#F8FAFC",
-              border: "1px solid rgba(55,67,117,.10)",
+              border: "1px solid rgba(17,17,17,.10)",
               borderRadius: "14px",
-              color: "rgba(55,67,117,.55)",
+              color: "rgba(17,17,17,.55)",
             }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(55,67,117,.06)"; }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(17,17,17,.06)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#F8FAFC"; }}
           >
             Cancel
@@ -343,18 +343,18 @@ export default function TaskModal({
             form="task-form"
             type="submit"
             disabled={saving || !title.trim()}
-            className="flex-1 py-2.5 font-bold text-sm text-white transition-all disabled:opacity-50"
+            className="flex-1 py-2.5 font-bold text-lg text-white transition-all disabled:opacity-50"
             style={{
-              background: "#374375",
+              background: "#111111",
               borderRadius: "14px",
-              boxShadow: "0 4px 14px rgba(55,67,117,.20)",
+              boxShadow: "0 4px 14px rgba(17,17,17,.20)",
             }}
             onMouseEnter={(e) => {
               if (!saving && title.trim())
-                (e.currentTarget as HTMLButtonElement).style.background = "#2A3562";
+                (e.currentTarget as HTMLButtonElement).style.background = "#000000";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background = "#374375";
+              (e.currentTarget as HTMLButtonElement).style.background = "#111111";
             }}
           >
             {saving ? "Saving…" : task ? "Update Task" : "Create Task"}

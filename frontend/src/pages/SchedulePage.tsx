@@ -6,7 +6,8 @@ import {
   listMeetings, createMeeting, updateMeeting, deleteMeeting, startMeeting,
   listTasks, listSessions,
 } from "../services/api";
-import { Plus, ChevronLeft, ChevronRight, X, Calendar, Clock, Users, FileText, Loader2 } from "lucide-react";
+import { Plus, ChevronLeft, ChevronRight, X, Calendar, Clock, Users, FileText, Loader2, CheckSquare, Mic } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 const ROW_H   = 64;
@@ -16,9 +17,9 @@ const HOURS   = Array.from({ length: END_H - START_H + 1 }, (_, i) => START_H + 
 const DAY_ABB = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const EV_CFG = {
-  task_due: { label: "Task Due", color: "#895159", bg: "rgba(137,81,89,.08)",   emoji: "☑" },
-  session:  { label: "Session",  color: "#BABDE2", bg: "rgba(186,189,226,.12)", emoji: "🎙" },
-  meeting:  { label: "Meeting",  color: "#374375", bg: "rgba(55,67,117,.08)",   emoji: "👥" },
+  task_due: { label: "Task Due", color: "#111111", bg: "rgba(17,17,17,.08)",   icon: CheckSquare },
+  session:  { label: "Session",  color: "#8A8A8A", bg: "rgba(17,17,17,.12)", icon: Mic },
+  meeting:  { label: "Meeting",  color: "#111111", bg: "rgba(17,17,17,.08)",   icon: Users },
 } as const;
 
 // ── Interfaces ─────────────────────────────────────────────────────────────────
@@ -34,7 +35,7 @@ interface CalendarEvent {
   endMin: number;
   color: string;
   bgColor: string;
-  emoji: string;
+  icon: LucideIcon;
   meetingId?: number;
 }
 
@@ -122,7 +123,7 @@ export default function SchedulePage() {
         title: t.title, subtitle: t.tags ?? undefined,
         date: t.due_date!,
         startHour: sh, startMin: sm, endHour: sh + 1, endMin: sm,
-        color: EV_CFG.task_due.color, bgColor: EV_CFG.task_due.bg, emoji: EV_CFG.task_due.emoji,
+        color: EV_CFG.task_due.color, bgColor: EV_CFG.task_due.bg, icon: EV_CFG.task_due.icon,
       });
     });
 
@@ -135,7 +136,7 @@ export default function SchedulePage() {
         date: ds(st),
         startHour: st.getHours(), startMin: st.getMinutes(),
         endHour: et.getHours(), endMin: et.getMinutes(),
-        color: EV_CFG.session.color, bgColor: EV_CFG.session.bg, emoji: EV_CFG.session.emoji,
+        color: EV_CFG.session.color, bgColor: EV_CFG.session.bg, icon: EV_CFG.session.icon,
       });
     });
 
@@ -148,7 +149,7 @@ export default function SchedulePage() {
         title: m.title, subtitle: m.participants ?? undefined,
         date: m.date,
         startHour: sh, startMin: sm, endHour: eh, endMin: em,
-        color: EV_CFG.meeting.color, bgColor: EV_CFG.meeting.bg, emoji: EV_CFG.meeting.emoji,
+        color: EV_CFG.meeting.color, bgColor: EV_CFG.meeting.bg, icon: EV_CFG.meeting.icon,
         meetingId: m.id,
       });
     });
@@ -276,22 +277,22 @@ export default function SchedulePage() {
     return (
       <div className="flex flex-col h-full">
         {/* Day headers */}
-        <div className="flex flex-shrink-0 border-b" style={{ borderColor: "rgba(55,67,117,.08)" }}>
+        <div className="flex flex-shrink-0 border-b" style={{ borderColor: "rgba(17,17,17,.08)" }}>
           <div className="w-14 flex-shrink-0" />
           {weekDays.map((day, i) => {
             const isTodayCol = ds(day) === today;
             return (
               <div key={i} className="flex-1 py-3 text-center border-l"
-                style={{ borderColor: "rgba(55,67,117,.06)" }}>
-                <p className="text-[10px] font-bold uppercase tracking-wide"
-                  style={{ color: "rgba(55,67,117,.55)" }}>
+                style={{ borderColor: "rgba(17,17,17,.06)" }}>
+                <p className="text-sm font-bold uppercase tracking-wide"
+                  style={{ color: "rgba(17,17,17,.55)" }}>
                   {DAY_ABB[i]}
                 </p>
-                <div className="w-8 h-8 rounded-full mx-auto flex items-center justify-center mt-0.5 text-sm font-bold"
+                <div className="w-8 h-8 rounded-full mx-auto flex items-center justify-center mt-0.5 text-lg font-bold"
                   style={{
-                    backgroundColor: isTodayCol ? "#374375" : "transparent",
-                    color: isTodayCol ? "#ffffff" : "#374375",
-                    boxShadow: isTodayCol ? "0 2px 8px rgba(55,67,117,.30)" : "none",
+                    backgroundColor: isTodayCol ? "#111111" : "transparent",
+                    color: isTodayCol ? "#ffffff" : "#111111",
+                    boxShadow: isTodayCol ? "0 2px 8px rgba(17,17,17,.30)" : "none",
                   }}>
                   {day.getDate()}
                 </div>
@@ -306,8 +307,8 @@ export default function SchedulePage() {
             {/* Time labels */}
             <div className="w-14 flex-shrink-0 relative select-none">
               {HOURS.map(h => (
-                <div key={h} className="absolute text-[10px] text-right pr-2 w-full"
-                  style={{ top: (h - START_H) * ROW_H - 8, color: "rgba(55,67,117,.60)" }}>
+                <div key={h} className="absolute text-sm text-right pr-2 w-full"
+                  style={{ top: (h - START_H) * ROW_H - 8, color: "rgba(17,17,17,.60)" }}>
                   {hourLabel(h)}
                 </div>
               ))}
@@ -321,8 +322,8 @@ export default function SchedulePage() {
                 <div key={i} className="flex-1 relative border-l cursor-pointer"
                   style={{
                     minHeight: `${(END_H - START_H + 1) * ROW_H}px`,
-                    borderColor: "rgba(55,67,117,.06)",
-                    backgroundColor: isTodayCol ? "rgba(55,67,117,.015)" : "transparent",
+                    borderColor: "rgba(17,17,17,.06)",
+                    backgroundColor: isTodayCol ? "rgba(17,17,17,.015)" : "transparent",
                   }}
                   onClick={(e) => handleColClick(e, day)}>
                   {/* Hour grid lines */}
@@ -330,7 +331,7 @@ export default function SchedulePage() {
                     <div key={h} className="absolute left-0 right-0 pointer-events-none"
                       style={{
                         top: (h - START_H) * ROW_H,
-                        borderBottom: h === END_H ? "none" : "1px dashed rgba(55,67,117,.15)",
+                        borderBottom: h === END_H ? "none" : "1px dashed rgba(17,17,17,.15)",
                       }} />
                   ))}
 
@@ -347,13 +348,13 @@ export default function SchedulePage() {
                         borderLeft: `3px solid ${ev.color}`,
                       }}>
                       <div className="flex items-center gap-1">
-                        <span className="text-[10px] leading-none">{ev.emoji}</span>
-                        <p className="text-[11px] font-bold leading-tight truncate" style={{ color: ev.color }}>
+                        <ev.icon size={13} style={{ color: ev.color, flexShrink: 0 }} />
+                        <p className="text-sm font-bold leading-tight truncate" style={{ color: ev.color }}>
                           {ev.title}
                         </p>
                       </div>
                       {ev.subtitle && evH(ev) >= 52 && (
-                        <p className="text-[10px] truncate mt-0.5" style={{ color: "rgba(55,67,117,.55)" }}>
+                        <p className="text-sm truncate mt-0.5" style={{ color: "rgba(17,17,17,.55)" }}>
                           {ev.subtitle}
                         </p>
                       )}
@@ -365,8 +366,8 @@ export default function SchedulePage() {
                     <div className="absolute left-0 right-0 z-10 flex items-center pointer-events-none"
                       style={{ top: nowTop }}>
                       <div className="w-2.5 h-2.5 rounded-full flex-shrink-0 -translate-y-1/2"
-                        style={{ backgroundColor: "#895159" }} />
-                      <div className="flex-1 h-px" style={{ backgroundColor: "#895159" }} />
+                        style={{ backgroundColor: "#111111" }} />
+                      <div className="flex-1 h-px" style={{ backgroundColor: "#111111" }} />
                     </div>
                   )}
                 </div>
@@ -396,7 +397,7 @@ export default function SchedulePage() {
     return (
       <div className="flex flex-col h-full">
         {/* 7-day selector header */}
-        <div className="flex flex-shrink-0 border-b" style={{ borderColor: "rgba(55,67,117,.08)" }}>
+        <div className="flex flex-shrink-0 border-b" style={{ borderColor: "rgba(17,17,17,.08)" }}>
           {weekDays.map((day, i) => {
             const isSel = ds(day) === ds(selDay);
             const isToD = ds(day) === today;
@@ -404,15 +405,15 @@ export default function SchedulePage() {
               <button key={i} onClick={() => setSelDay(day)}
                 className="flex-1 py-3 text-center border-l transition-all"
                 style={{
-                  borderColor: "rgba(55,67,117,.06)",
-                  backgroundColor: isSel ? "#374375" : "transparent",
+                  borderColor: "rgba(17,17,17,.06)",
+                  backgroundColor: isSel ? "#111111" : "transparent",
                 }}>
-                <p className="text-[10px] font-bold uppercase tracking-wide"
-                  style={{ color: isSel ? "rgba(255,255,255,.65)" : "rgba(55,67,117,.60)" }}>
+                <p className="text-sm font-bold uppercase tracking-wide"
+                  style={{ color: isSel ? "rgba(255,255,255,.65)" : "rgba(17,17,17,.60)" }}>
                   {DAY_ABB[i]}
                 </p>
-                <p className="text-xl font-bold mt-0.5"
-                  style={{ color: isSel ? "#ffffff" : isToD ? "#374375" : "rgba(55,67,117,.65)" }}>
+                <p className="text-3xl font-bold mt-0.5"
+                  style={{ color: isSel ? "#ffffff" : isToD ? "#111111" : "rgba(17,17,17,.65)" }}>
                   {day.getDate()}
                 </p>
               </button>
@@ -428,11 +429,11 @@ export default function SchedulePage() {
             {HOURS.map(h => (
               <div key={h} className="flex items-start absolute left-0 right-0 pointer-events-none"
                 style={{ top: (h - START_H) * ROW_H, height: ROW_H }}>
-                <div className="w-14 flex-shrink-0 text-[10px] text-right pr-3 pt-1 select-none"
-                  style={{ color: "rgba(55,67,117,.60)" }}>
+                <div className="w-14 flex-shrink-0 text-sm text-right pr-3 pt-1 select-none"
+                  style={{ color: "rgba(17,17,17,.60)" }}>
                   {hourLabel(h)}
                 </div>
-                <div className="flex-1 border-b border-dashed" style={{ borderColor: "rgba(55,67,117,.15)" }} />
+                <div className="flex-1 border-b border-dashed" style={{ borderColor: "rgba(17,17,17,.15)" }} />
               </div>
             ))}
 
@@ -452,16 +453,16 @@ export default function SchedulePage() {
                 }}>
                 <div className="flex items-center justify-between px-4 py-2">
                   <div className="flex items-center gap-2">
-                    <span>{ev.emoji}</span>
-                    <p className="font-bold text-sm" style={{ color: ev.color }}>{ev.title}</p>
+                    <ev.icon size={16} style={{ color: ev.color, flexShrink: 0 }} />
+                    <p className="font-bold text-lg" style={{ color: ev.color }}>{ev.title}</p>
                   </div>
-                  <p className="text-xs font-semibold flex-shrink-0 ml-4"
-                    style={{ color: "rgba(55,67,117,.55)" }}>
+                  <p className="text-base font-semibold flex-shrink-0 ml-4"
+                    style={{ color: "rgba(17,17,17,.55)" }}>
                     {fmt12(ev.startHour, ev.startMin)} – {fmt12(ev.endHour, ev.endMin)}
                   </p>
                 </div>
                 {ev.subtitle && Math.max(evH(ev), 52) >= 64 && (
-                  <p className="px-4 text-xs" style={{ color: "rgba(55,67,117,.55)" }}>{ev.subtitle}</p>
+                  <p className="px-4 text-base" style={{ color: "rgba(17,17,17,.55)" }}>{ev.subtitle}</p>
                 )}
               </div>
             ))}
@@ -471,9 +472,9 @@ export default function SchedulePage() {
               <div className="absolute left-0 right-0 z-10 flex items-center pointer-events-none"
                 style={{ top: nowTop }}>
                 <div className="w-14 flex-shrink-0 flex justify-end pr-1.5">
-                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "#895159" }} />
+                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "#111111" }} />
                 </div>
-                <div className="flex-1 h-px" style={{ backgroundColor: "#895159" }} />
+                <div className="flex-1 h-px" style={{ backgroundColor: "#111111" }} />
               </div>
             )}
           </div>
@@ -493,7 +494,7 @@ export default function SchedulePage() {
 
     return (
       <aside className="w-64 flex-shrink-0 overflow-y-auto"
-        style={{ borderLeft: "1px solid rgba(55,67,117,.08)", backgroundColor: "#ffffff" }}>
+        style={{ borderLeft: "1px solid rgba(17,17,17,.08)", backgroundColor: "#ffffff" }}>
         <div className="px-4 py-5 space-y-5">
 
           {/* Mini calendar */}
@@ -502,23 +503,23 @@ export default function SchedulePage() {
               <button
                 onClick={() => setSideMonth(d => new Date(d.getFullYear(), d.getMonth() - 1, 1))}
                 className="w-6 h-6 flex items-center justify-center rounded-lg"
-                style={{ color: "rgba(55,67,117,.50)", backgroundColor: "rgba(55,67,117,.07)" }}>
+                style={{ color: "rgba(17,17,17,.50)", backgroundColor: "rgba(17,17,17,.07)" }}>
                 <ChevronLeft size={12} />
               </button>
-              <p className="text-xs font-bold" style={{ color: "#374375" }}>
+              <p className="text-base font-bold" style={{ color: "#111111" }}>
                 {sideMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
               </p>
               <button
                 onClick={() => setSideMonth(d => new Date(d.getFullYear(), d.getMonth() + 1, 1))}
                 className="w-6 h-6 flex items-center justify-center rounded-lg"
-                style={{ color: "rgba(55,67,117,.50)", backgroundColor: "rgba(55,67,117,.07)" }}>
+                style={{ color: "rgba(17,17,17,.50)", backgroundColor: "rgba(17,17,17,.07)" }}>
                 <ChevronRight size={12} />
               </button>
             </div>
             <div className="grid grid-cols-7 mb-0.5">
               {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
-                <div key={i} className="text-center text-[9px] font-bold py-0.5"
-                  style={{ color: "rgba(55,67,117,.40)" }}>{d}</div>
+                <div key={i} className="text-center text-xs font-bold py-0.5"
+                  style={{ color: "rgba(17,17,17,.40)" }}>{d}</div>
               ))}
             </div>
             <div className="grid grid-cols-7">
@@ -533,11 +534,11 @@ export default function SchedulePage() {
                       setView("day");
                       setWeekStart(getMonday(new Date(yr, mo, d)));
                     }}
-                    className="h-7 rounded-lg text-[11px] font-bold transition-all"
+                    className="h-7 rounded-lg text-sm font-bold transition-all"
                     style={{
-                      backgroundColor: isT ? "#374375" : "transparent",
-                      color: isT ? "#ffffff" : "#374375",
-                      boxShadow: isT ? "0 2px 8px rgba(55,67,117,.25)" : "none",
+                      backgroundColor: isT ? "#111111" : "transparent",
+                      color: isT ? "#ffffff" : "#111111",
+                      boxShadow: isT ? "0 2px 8px rgba(17,17,17,.25)" : "none",
                     }}>
                     {d}
                   </button>
@@ -546,14 +547,14 @@ export default function SchedulePage() {
             </div>
           </div>
 
-          <div style={{ borderTop: "1px solid rgba(55,67,117,.07)" }} />
+          <div style={{ borderTop: "1px solid rgba(17,17,17,.07)" }} />
 
           {/* Today's agenda */}
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest mb-3"
-              style={{ color: "rgba(55,67,117,.40)" }}>TODAY'S AGENDA</p>
+            <p className="text-sm font-bold uppercase tracking-widest mb-3"
+              style={{ color: "rgba(17,17,17,.40)" }}>TODAY'S AGENDA</p>
             {todaysAgenda.length === 0 ? (
-              <p className="text-xs" style={{ color: "rgba(55,67,117,.40)" }}>Nothing scheduled today</p>
+              <p className="text-base" style={{ color: "rgba(17,17,17,.40)" }}>Nothing scheduled today</p>
             ) : (
               <div className="space-y-2">
                 {todaysAgenda.map(ev => {
@@ -563,11 +564,11 @@ export default function SchedulePage() {
                       <div className="w-0.5 rounded-full mt-1 flex-shrink-0"
                         style={{ backgroundColor: ev.color, height: "32px" }} />
                       <div>
-                        <p className="text-xs font-semibold" style={{ color: "#374375" }}>{ev.title}</p>
-                        <p className="text-[10px]" style={{ color: "rgba(55,67,117,.50)" }}>
+                        <p className="text-base font-semibold" style={{ color: "#111111" }}>{ev.title}</p>
+                        <p className="text-sm" style={{ color: "rgba(17,17,17,.50)" }}>
                           {fmt12(ev.startHour, ev.startMin)} – {fmt12(ev.endHour, ev.endMin)}
                           {isNowEv && (
-                            <span className="ml-1 font-bold" style={{ color: "#895159" }}>NOW</span>
+                            <span className="ml-1 font-bold" style={{ color: "#111111" }}>NOW</span>
                           )}
                         </p>
                       </div>
@@ -578,21 +579,21 @@ export default function SchedulePage() {
             )}
           </div>
 
-          <div style={{ borderTop: "1px solid rgba(55,67,117,.07)" }} />
+          <div style={{ borderTop: "1px solid rgba(17,17,17,.07)" }} />
 
           {/* Upcoming deadlines */}
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest mb-3"
-              style={{ color: "rgba(55,67,117,.40)" }}>UPCOMING DEADLINES</p>
+            <p className="text-sm font-bold uppercase tracking-widest mb-3"
+              style={{ color: "rgba(17,17,17,.40)" }}>UPCOMING DEADLINES</p>
             {upcomingDeadlines.length === 0 ? (
-              <p className="text-xs" style={{ color: "rgba(55,67,117,.40)" }}>No upcoming deadlines</p>
+              <p className="text-base" style={{ color: "rgba(17,17,17,.40)" }}>No upcoming deadlines</p>
             ) : (
               <div className="space-y-1.5">
                 {upcomingDeadlines.map(t => (
                   <div key={t.id} className="flex items-center justify-between">
-                    <p className="text-xs font-semibold truncate" style={{ color: "#374375" }}>{t.title}</p>
-                    <span className="text-[10px] font-bold flex-shrink-0 ml-2 flex items-center gap-0.5"
-                      style={{ color: "#895159" }}>
+                    <p className="text-base font-semibold truncate" style={{ color: "#111111" }}>{t.title}</p>
+                    <span className="text-sm font-bold flex-shrink-0 ml-2 flex items-center gap-0.5"
+                      style={{ color: "#111111" }}>
                       ● {fmtShortDate(t.due_date!)}
                     </span>
                   </div>
@@ -609,9 +610,7 @@ export default function SchedulePage() {
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <div className="flex h-[100dvh]" style={{
-      backgroundColor: "#FFFCF5",
-      backgroundImage: "radial-gradient(rgba(55,67,117,.06) 1.5px, transparent 1.5px)",
-      backgroundSize: "28px 28px",
+      backgroundColor: "#FFFFFF",
     }}>
       <Sidebar />
 
@@ -622,10 +621,10 @@ export default function SchedulePage() {
           {/* Header */}
           <div className="flex-shrink-0 px-6 py-5 flex items-center justify-between">
             <div>
-              <h1 className="font-['Yeseva_One'] text-2xl font-bold" style={{ color: "#374375" }}>
+              <h1 className="font-['Yeseva_One'] text-4xl font-bold" style={{ color: "#111111" }}>
                 Schedule
               </h1>
-              <p className="text-sm font-medium mt-0.5" style={{ color: "rgba(55,67,117,.55)" }}>
+              <p className="text-lg font-medium mt-0.5" style={{ color: "rgba(17,17,17,.55)" }}>
                 {weekLabel} · {thisWeekCount} events this week
               </p>
             </div>
@@ -634,24 +633,24 @@ export default function SchedulePage() {
               <button
                 onClick={() => setWeekStart(d => { const n = new Date(d); n.setDate(n.getDate() - 7); return n; })}
                 className="w-8 h-8 flex items-center justify-center rounded-lg transition-all"
-                style={{ color: "rgba(55,67,117,.55)", backgroundColor: "rgba(55,67,117,.07)" }}>
+                style={{ color: "rgba(17,17,17,.55)", backgroundColor: "rgba(17,17,17,.07)" }}>
                 <ChevronLeft size={16} />
               </button>
               <button
                 onClick={() => setWeekStart(d => { const n = new Date(d); n.setDate(n.getDate() + 7); return n; })}
                 className="w-8 h-8 flex items-center justify-center rounded-lg transition-all"
-                style={{ color: "rgba(55,67,117,.55)", backgroundColor: "rgba(55,67,117,.07)" }}>
+                style={{ color: "rgba(17,17,17,.55)", backgroundColor: "rgba(17,17,17,.07)" }}>
                 <ChevronRight size={16} />
               </button>
 
               {/* Day / Week toggle */}
-              <div className="flex rounded-xl overflow-hidden border" style={{ borderColor: "rgba(55,67,117,.12)" }}>
+              <div className="flex rounded-xl overflow-hidden border" style={{ borderColor: "rgba(17,17,17,.12)" }}>
                 {(["day", "week"] as const).map(v => (
                   <button key={v} onClick={() => setView(v)}
-                    className="px-4 py-1.5 text-sm font-bold capitalize transition-all"
+                    className="px-4 py-1.5 text-lg font-bold capitalize transition-all"
                     style={{
-                      backgroundColor: view === v ? "#374375" : "transparent",
-                      color: view === v ? "#ffffff" : "rgba(55,67,117,.60)",
+                      backgroundColor: view === v ? "#111111" : "transparent",
+                      color: view === v ? "#ffffff" : "rgba(17,17,17,.60)",
                     }}>
                     {v}
                   </button>
@@ -661,10 +660,10 @@ export default function SchedulePage() {
               {/* Add event */}
               <button
                 onClick={() => { setEditMeeting(null); setPrefill(null); setModalOpen(true); }}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold text-white transition-all"
-                style={{ backgroundColor: "#374375" }}
-                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#2A3562"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#374375"; }}>
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-lg font-bold text-white transition-all"
+                style={{ backgroundColor: "#111111" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#000000"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#111111"; }}>
                 <Plus size={15} /> Add event
               </button>
             </div>
@@ -682,10 +681,10 @@ export default function SchedulePage() {
               const active = activeType === key;
               return (
                 <button key={key} onClick={() => setActiveType(key)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-base font-bold transition-all"
                   style={{
-                    backgroundColor: active ? "#374375" : "rgba(55,67,117,.07)",
-                    color: active ? "#ffffff" : "rgba(55,67,117,.65)",
+                    backgroundColor: active ? "#111111" : "rgba(17,17,17,.07)",
+                    color: active ? "#ffffff" : "rgba(17,17,17,.65)",
                   }}>
                   {cfg && (
                     <span className="w-2 h-2 rounded-full flex-shrink-0"
@@ -699,7 +698,7 @@ export default function SchedulePage() {
 
           {/* Calendar view */}
           <div className="flex-1 overflow-hidden bg-white mx-4 mb-4 rounded-2xl border"
-            style={{ borderColor: "rgba(55,67,117,.08)", boxShadow: "0 4px 24px rgba(55,67,117,.07)" }}>
+            style={{ borderColor: "rgba(17,17,17,.08)", boxShadow: "0 4px 24px rgba(17,17,17,.07)" }}>
             {view === "week" ? WeekView() : DayView()}
           </div>
 
@@ -763,25 +762,25 @@ function MeetingModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ backgroundColor: "rgba(55,67,117,.35)", backdropFilter: "blur(4px)" }}>
+      style={{ backgroundColor: "rgba(17,17,17,.35)", backdropFilter: "blur(4px)" }}>
       <div className="w-full max-w-lg"
         style={{
           background: "#ffffff",
           borderRadius: "28px",
-          boxShadow: "0 24px 64px rgba(55,67,117,.20)",
-          border: "1px solid rgba(55,67,117,.08)",
+          boxShadow: "0 24px 64px rgba(17,17,17,.20)",
+          border: "1px solid rgba(17,17,17,.08)",
         }}>
 
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5"
-          style={{ borderBottom: "1px solid rgba(55,67,117,.06)" }}>
-          <h2 className="font-['Yeseva_One'] text-xl font-bold" style={{ color: "#374375" }}>
+          style={{ borderBottom: "1px solid rgba(17,17,17,.06)" }}>
+          <h2 className="font-['Yeseva_One'] text-3xl font-bold" style={{ color: "#111111" }}>
             {meeting ? "Edit Meeting" : "New Meeting"}
           </h2>
           <button onClick={onClose} className="p-1.5 rounded-xl transition-all"
-            style={{ color: "rgba(55,67,117,.50)" }}
-            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = "#374375"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(55,67,117,.50)"; }}>
+            style={{ color: "rgba(17,17,17,.50)" }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = "#111111"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(17,17,17,.50)"; }}>
             <X size={18} />
           </button>
         </div>
@@ -789,17 +788,17 @@ function MeetingModal({
         <form onSubmit={submit} className="px-6 py-5 space-y-4">
           {/* Title */}
           <div>
-            <label className="block text-xs font-bold mb-1.5" style={{ color: "rgba(55,67,117,.55)" }}>
+            <label className="block text-base font-bold mb-1.5" style={{ color: "rgba(17,17,17,.55)" }}>
               Meeting title *
             </label>
             <input
-              className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold outline-none transition-all"
-              style={{ background: "rgba(55,67,117,.04)", border: "1px solid rgba(55,67,117,.10)", color: "#374375" }}
+              className="w-full px-4 py-2.5 rounded-xl text-lg font-semibold outline-none transition-all"
+              style={{ background: "rgba(17,17,17,.04)", border: "1px solid rgba(17,17,17,.10)", color: "#111111" }}
               placeholder="e.g. Weekly sync, Client review..."
               value={form.title}
               onChange={set("title")}
-              onFocus={e => { e.target.style.borderColor = "#374375"; }}
-              onBlur={e => { e.target.style.borderColor = "rgba(55,67,117,.10)"; }}
+              onFocus={e => { e.target.style.borderColor = "#111111"; }}
+              onBlur={e => { e.target.style.borderColor = "rgba(17,17,17,.10)"; }}
               required
               autoFocus
             />
@@ -808,90 +807,90 @@ function MeetingModal({
           {/* Date + Start Time + End Time */}
           <div className="flex gap-3">
             <div className="flex-1">
-              <label className="block text-xs font-bold mb-1.5" style={{ color: "rgba(55,67,117,.55)" }}>
+              <label className="block text-base font-bold mb-1.5" style={{ color: "rgba(17,17,17,.55)" }}>
                 <span className="flex items-center gap-1"><Calendar size={11} /> Date</span>
               </label>
               <input type="date"
-                className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold outline-none transition-all"
-                style={{ background: "rgba(55,67,117,.04)", border: "1px solid rgba(55,67,117,.10)", color: "#374375" }}
+                className="w-full px-4 py-2.5 rounded-xl text-lg font-semibold outline-none transition-all"
+                style={{ background: "rgba(17,17,17,.04)", border: "1px solid rgba(17,17,17,.10)", color: "#111111" }}
                 value={form.date}
                 onChange={set("date")}
-                onFocus={e => { e.target.style.borderColor = "#374375"; }}
-                onBlur={e => { e.target.style.borderColor = "rgba(55,67,117,.10)"; }}
+                onFocus={e => { e.target.style.borderColor = "#111111"; }}
+                onBlur={e => { e.target.style.borderColor = "rgba(17,17,17,.10)"; }}
               />
             </div>
             <div className="flex-1">
-              <label className="block text-xs font-bold mb-1.5" style={{ color: "rgba(55,67,117,.55)" }}>
+              <label className="block text-base font-bold mb-1.5" style={{ color: "rgba(17,17,17,.55)" }}>
                 <span className="flex items-center gap-1"><Clock size={11} /> Start Time</span>
               </label>
               <input type="time"
-                className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold outline-none transition-all"
-                style={{ background: "rgba(55,67,117,.04)", border: "1px solid rgba(55,67,117,.10)", color: "#374375" }}
+                className="w-full px-4 py-2.5 rounded-xl text-lg font-semibold outline-none transition-all"
+                style={{ background: "rgba(17,17,17,.04)", border: "1px solid rgba(17,17,17,.10)", color: "#111111" }}
                 value={form.time}
                 onChange={set("time")}
-                onFocus={e => { e.target.style.borderColor = "#374375"; }}
-                onBlur={e => { e.target.style.borderColor = "rgba(55,67,117,.10)"; }}
+                onFocus={e => { e.target.style.borderColor = "#111111"; }}
+                onBlur={e => { e.target.style.borderColor = "rgba(17,17,17,.10)"; }}
               />
             </div>
             <div className="flex-1">
-              <label className="block text-xs font-bold mb-1.5" style={{ color: "rgba(55,67,117,.55)" }}>
+              <label className="block text-base font-bold mb-1.5" style={{ color: "rgba(17,17,17,.55)" }}>
                 <span className="flex items-center gap-1"><Clock size={11} /> End Time</span>
               </label>
               <input type="time"
-                className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold outline-none transition-all"
-                style={{ background: "rgba(55,67,117,.04)", border: "1px solid rgba(55,67,117,.10)", color: "#374375" }}
+                className="w-full px-4 py-2.5 rounded-xl text-lg font-semibold outline-none transition-all"
+                style={{ background: "rgba(17,17,17,.04)", border: "1px solid rgba(17,17,17,.10)", color: "#111111" }}
                 value={form.end_time}
                 onChange={set("end_time")}
-                onFocus={e => { e.target.style.borderColor = "#374375"; }}
-                onBlur={e => { e.target.style.borderColor = "rgba(55,67,117,.10)"; }}
+                onFocus={e => { e.target.style.borderColor = "#111111"; }}
+                onBlur={e => { e.target.style.borderColor = "rgba(17,17,17,.10)"; }}
               />
             </div>
           </div>
 
           {/* Participants */}
           <div>
-            <label className="block text-xs font-bold mb-1.5" style={{ color: "rgba(55,67,117,.55)" }}>
+            <label className="block text-base font-bold mb-1.5" style={{ color: "rgba(17,17,17,.55)" }}>
               <span className="flex items-center gap-1"><Users size={11} /> Participants</span>
             </label>
             <input
-              className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold outline-none transition-all"
-              style={{ background: "rgba(55,67,117,.04)", border: "1px solid rgba(55,67,117,.10)", color: "#374375" }}
+              className="w-full px-4 py-2.5 rounded-xl text-lg font-semibold outline-none transition-all"
+              style={{ background: "rgba(17,17,17,.04)", border: "1px solid rgba(17,17,17,.10)", color: "#111111" }}
               placeholder="e.g. Riya, Priya, Sam"
               value={form.participants}
               onChange={set("participants")}
-              onFocus={e => { e.target.style.borderColor = "#374375"; }}
-              onBlur={e => { e.target.style.borderColor = "rgba(55,67,117,.10)"; }}
+              onFocus={e => { e.target.style.borderColor = "#111111"; }}
+              onBlur={e => { e.target.style.borderColor = "rgba(17,17,17,.10)"; }}
             />
           </div>
 
           {/* Notes */}
           <div>
-            <label className="block text-xs font-bold mb-1.5" style={{ color: "rgba(55,67,117,.55)" }}>
+            <label className="block text-base font-bold mb-1.5" style={{ color: "rgba(17,17,17,.55)" }}>
               <span className="flex items-center gap-1"><FileText size={11} /> Details to remember</span>
             </label>
             <textarea
-              className="w-full px-4 py-2.5 rounded-xl text-sm font-semibold outline-none transition-all resize-none"
-              style={{ background: "rgba(55,67,117,.04)", border: "1px solid rgba(55,67,117,.10)", color: "#374375" }}
+              className="w-full px-4 py-2.5 rounded-xl text-lg font-semibold outline-none transition-all resize-none"
+              style={{ background: "rgba(17,17,17,.04)", border: "1px solid rgba(17,17,17,.10)", color: "#111111" }}
               placeholder="Agenda items, questions to ask, goals for the meeting..."
               rows={3}
               value={form.notes}
               onChange={set("notes")}
-              onFocus={e => { e.target.style.borderColor = "#374375"; }}
-              onBlur={e => { e.target.style.borderColor = "rgba(55,67,117,.10)"; }}
+              onFocus={e => { e.target.style.borderColor = "#111111"; }}
+              onBlur={e => { e.target.style.borderColor = "rgba(17,17,17,.10)"; }}
             />
           </div>
 
           {/* Actions */}
           <div className="flex items-center justify-between pt-2"
-            style={{ borderTop: "1px solid rgba(55,67,117,.06)" }}>
+            style={{ borderTop: "1px solid rgba(17,17,17,.06)" }}>
             <div className="flex items-center gap-2">
               {meeting && (
                 <>
                   <button type="button"
                     onClick={() => onDelete(meeting.id)}
                     disabled={deletingId === meeting.id}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all disabled:opacity-50"
-                    style={{ backgroundColor: "rgba(137,81,89,.08)", color: "#895159" }}>
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-base font-bold transition-all disabled:opacity-50"
+                    style={{ backgroundColor: "rgba(17,17,17,.08)", color: "#111111" }}>
                     {deletingId === meeting.id && <Loader2 size={12} className="animate-spin" />}
                     Delete
                   </button>
@@ -899,8 +898,8 @@ function MeetingModal({
                     <button type="button"
                       onClick={() => onStart(meeting)}
                       disabled={startingId === meeting.id}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-white transition-all disabled:opacity-50"
-                      style={{ backgroundColor: "#374375" }}>
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-base font-bold text-white transition-all disabled:opacity-50"
+                      style={{ backgroundColor: "#111111" }}>
                       {startingId === meeting.id && <Loader2 size={12} className="animate-spin" />}
                       Start
                     </button>
@@ -910,16 +909,16 @@ function MeetingModal({
             </div>
             <div className="flex items-center gap-3">
               <button type="button" onClick={onClose}
-                className="px-4 py-2 rounded-xl text-sm font-bold transition-all"
-                style={{ color: "rgba(55,67,117,.50)" }}>
+                className="px-4 py-2 rounded-xl text-lg font-bold transition-all"
+                style={{ color: "rgba(17,17,17,.50)" }}>
                 Cancel
               </button>
               <button type="submit"
                 disabled={saving || !form.title.trim()}
-                className="flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-bold text-white transition-all shadow-sm disabled:opacity-50"
-                style={{ backgroundColor: "#374375" }}
-                onMouseEnter={e => { if (!saving) (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#2A3562"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#374375"; }}>
+                className="flex items-center gap-2 px-5 py-2 rounded-xl text-lg font-bold text-white transition-all shadow-sm disabled:opacity-50"
+                style={{ backgroundColor: "#111111" }}
+                onMouseEnter={e => { if (!saving) (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#000000"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#111111"; }}>
                 {saving && <Loader2 size={14} className="animate-spin" />}
                 {meeting ? "Save changes" : "Schedule meeting"}
               </button>

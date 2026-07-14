@@ -4,7 +4,6 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import { useReminders } from "./hooks/useReminders";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
-import DashboardPage from "./pages/DashboardPage";
 import HomePage from "./pages/HomePage";
 import TasksPage from "./pages/TasksPage";
 import SessionsPage from "./pages/SessionsPage";
@@ -26,15 +25,15 @@ class ErrorBoundary extends Component<
   render() {
     if (this.state.error) {
       return (
-        <div className="min-h-screen bg-[#ECCCA6] flex items-center justify-center p-8">
+        <div className="min-h-screen bg-[#F5F5F5] flex items-center justify-center p-8">
           <div className="max-w-lg w-full bg-white border border-red-200 rounded-2xl p-6 shadow-sm">
-            <h2 className="font-['Yeseva_One'] text-2xl font-bold text-red-500 mb-2">Something went wrong</h2>
-            <pre className="text-red-400 text-xs whitespace-pre-wrap break-words mb-4">
+            <h2 className="font-['Yeseva_One'] text-4xl font-bold text-red-500 mb-2">Something went wrong</h2>
+            <pre className="text-red-400 text-base whitespace-pre-wrap break-words mb-4">
               {this.state.error}
             </pre>
             <button
               onClick={() => { this.setState({ error: null }); window.location.href = "/dashboard"; }}
-              className="bg-[#47748B] hover:bg-[#27456C] text-white px-4 py-2 rounded-full text-sm font-bold"
+              className="bg-[#555555] hover:bg-[#000000] text-white px-4 py-2 rounded-full text-lg font-bold"
             >
               Back to dashboard
             </button>
@@ -48,13 +47,13 @@ class ErrorBoundary extends Component<
 
 function PrivateRoute({ children }: { children: ReactNode }) {
   const { token, loading } = useAuth();
-  if (loading) return <div className="min-h-screen bg-[#ECCCA6]" />;
+  if (loading) return <div className="min-h-screen bg-[#F5F5F5]" />;
   return token ? <>{children}</> : <Navigate to="/" replace />;
 }
 
 function PublicRoute({ children }: { children: ReactNode }) {
   const { token, loading } = useAuth();
-  if (loading) return <div className="min-h-screen bg-[#ECCCA6]" />;
+  if (loading) return <div className="min-h-screen bg-[#F5F5F5]" />;
   return !token ? <>{children}</> : <Navigate to="/dashboard" replace />;
 }
 

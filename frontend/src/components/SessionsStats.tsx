@@ -36,15 +36,15 @@ export default function SessionsStats({ sessions }: { sessions: Session[] }) {
     <div
       className="rounded-[24px] px-5 py-4 flex flex-col"
       style={{
-        background: "linear-gradient(135deg, #1FA7A6 0%, #0D3B66 100%)",
-        boxShadow: "0 12px 40px rgba(31,167,166,.25)",
+        background: "linear-gradient(135deg, #111111 0%, #111111 100%)",
+        boxShadow: "0 12px 40px rgba(17,17,17,.25)",
       }}
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-1.5">
           <Mic size={12} className="text-white/60" />
-          <p className="text-[10px] text-white/60 font-bold uppercase tracking-widest">Sessions</p>
+          <p className="text-sm text-white/60 font-bold uppercase tracking-widest">Sessions</p>
         </div>
         <div
           className="flex rounded-lg p-0.5 gap-0.5"
@@ -54,10 +54,10 @@ export default function SessionsStats({ sessions }: { sessions: Session[] }) {
             <button
               key={key}
               onClick={() => setPeriod(key)}
-              className="px-2.5 py-1 rounded-md text-[10px] font-bold transition-all"
+              className="px-2.5 py-1 rounded-md text-sm font-bold transition-all"
               style={
                 period === key
-                  ? { backgroundColor: "#FFC857", color: "#0D3B66" }
+                  ? { backgroundColor: "#FFFFFF", color: "#111111" }
                   : { color: "rgba(255,255,255,.65)" }
               }
             >
@@ -68,14 +68,14 @@ export default function SessionsStats({ sessions }: { sessions: Session[] }) {
       </div>
 
       <p className="text-6xl font-bold text-white leading-none">{count}</p>
-      <p className="text-sm text-white/55 font-semibold mt-2">{periodLabel}</p>
+      <p className="text-lg text-white/55 font-semibold mt-2">{periodLabel}</p>
 
       <div
         className="mt-4 pt-3 flex items-center gap-2"
         style={{ borderTop: "1px solid rgba(255,255,255,.15)" }}
       >
         <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "rgba(255,255,255,.35)" }} />
-        <p className="text-xs text-white/40 font-semibold">{sessions.length} sessions all time</p>
+        <p className="text-base text-white/40 font-semibold">{sessions.length} sessions all time</p>
       </div>
     </div>
   );

@@ -6,42 +6,42 @@
   --font-display: 'Yeseva One', serif;
 
   /* ── Brand palette ─────────────────────────────── */
-  --color-abyss:      #0D3B66;   /* Ocean Abyss   — primary, sidebar */
-  --color-lagoon:     #1FA7A6;   /* Lagoon Depths — teal accent      */
-  --color-orchid:     #6C2E7B;   /* Orchid Dream  — purple accent    */
-  --color-lilac:      #8B7FD6;   /* Moonlit Lilac — soft purple      */
-  --color-coral:      #E75480;   /* Coral Kiss    — urgent / error   */
-  --color-tangerine:  #FF8A5B;   /* Tangerine Tide — warm accent     */
-  --color-amber:      #FFC857;   /* Sunlit Amber  — warning / gold   */
-  --color-shell:      #FFD8C7;   /* Shell Glow    — blush tint       */
+  --color-abyss:      #111111;   /* Ocean Abyss   — primary, sidebar */
+  --color-lagoon:     #111111;   /* Lagoon Depths — teal accent      */
+  --color-orchid:     #111111;   /* Orchid Dream  — purple accent    */
+  --color-lilac:      #8A8A8A;   /* Moonlit Lilac — soft purple      */
+  --color-coral:      #111111;   /* Coral Kiss    — urgent / error   */
+  --color-tangerine:  #111111;   /* Tangerine Tide — warm accent     */
+  --color-amber:      #111111;   /* Sunlit Amber  — warning / gold   */
+  --color-shell:      #EEEEEE;   /* Shell Glow    — blush tint       */
 
   /* ── Text hierarchy ────────────────────────────── */
-  --color-ink:    #0D3B66;
-  --color-ink-2:  #64748B;
-  --color-ink-3:  #94A3B8;
+  --color-ink:    #111111;
+  --color-ink-2:  #666666;
+  --color-ink-3:  #8A8A8A;
 
   /* ── Page backgrounds ──────────────────────────── */
-  --color-bg-dashboard:  #FFF6F2;
-  --color-bg-tasks:      #FFF2F4;
-  --color-bg-sessions:   #EEF9F8;
-  --color-bg-highlights: #FAF4FD;
-  --color-bg-auth:       #F0F4FA;
+  --color-bg-dashboard:  #FFFFFF;
+  --color-bg-tasks:      #FFFFFF;
+  --color-bg-sessions:   #FFFFFF;
+  --color-bg-highlights: #FFFFFF;
+  --color-bg-auth:       #FFFFFF;
 
   /* ── Legacy aliases (keep for code still referencing old tokens) */
-  --color-navy:       #0D3B66;
-  --color-blue:       #1FA7A6;
-  --color-sky:        #8B7FD6;
-  --color-sand:       #FFD8C7;
-  --color-sky-border: rgba(13,59,102,.1);
+  --color-navy:       #111111;
+  --color-blue:       #111111;
+  --color-sky:        #8A8A8A;
+  --color-sand:       #EEEEEE;
+  --color-sky-border: rgba(17,17,17,.1);
 }
 
 /* ── Design-token CSS custom properties ──────────────────── */
 :root {
   --card-bg:         #ffffff;
   --card-radius:     24px;
-  --card-border:     1px solid rgba(13,59,102,.06);
-  --card-shadow:     0 12px 40px rgba(13,59,102,.08);
-  --card-shadow-hover: 0 18px 45px rgba(13,59,102,.15);
+  --card-border:     1px solid rgba(17,17,17,.06);
+  --card-shadow:     0 12px 40px rgba(17,17,17,.08);
+  --card-shadow-hover: 0 18px 45px rgba(17,17,17,.15);
   --card-transition: all 250ms ease;
 
   --btn-radius:  16px;
@@ -53,16 +53,16 @@
   *, *::before, *::after { box-sizing: border-box; }
 
   body {
-    background-color: var(--color-bg-auth, #F0F4FA);
-    color: #0D3B66;
+    background-color: var(--color-bg-auth, #FFFFFF);
+    color: #111111;
     font-family: 'Quicksand', sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 
   ::-webkit-scrollbar       { width: 5px; height: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(13,59,102,.2); border-radius: 99px; }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(13,59,102,.35); }
+  ::-webkit-scrollbar-thumb { background: rgba(17,17,17,.2); border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(17,17,17,.35); }
 }
 
 /* ── Reusable component classes ──────────────────────────── */
@@ -81,38 +81,38 @@
   }
 
   .n-btn-primary {
-    background: #0D3B66;
+    background: #111111;
     color: #ffffff;
     border-radius: var(--btn-radius);
     font-weight: 700;
-    font-size: 0.875rem;
+    font-size: 1.0625rem;
     transition: background 200ms;
   }
-  .n-btn-primary:hover { background: #154D83; }
+  .n-btn-primary:hover { background: #333333; }
 
   .n-btn-teal {
-    background: #1FA7A6;
+    background: #111111;
     color: #ffffff;
     border-radius: var(--btn-radius);
     font-weight: 700;
-    font-size: 0.875rem;
+    font-size: 1.0625rem;
     transition: background 200ms;
   }
-  .n-btn-teal:hover { background: #178F8E; }
+  .n-btn-teal:hover { background: #000000; }
 
   .n-input {
     background: #F8FAFC;
-    border: 1px solid rgba(13,59,102,.12);
+    border: 1px solid rgba(17,17,17,.12);
     border-radius: var(--input-radius);
-    color: #0D3B66;
+    color: #111111;
     font-weight: 500;
-    font-size: 0.875rem;
+    font-size: 1.0625rem;
     transition: border-color 150ms, box-shadow 150ms;
   }
   .n-input:focus {
     outline: none;
-    border-color: #1FA7A6;
-    box-shadow: 0 0 0 3px rgba(31,167,166,.12);
+    border-color: #111111;
+    box-shadow: 0 0 0 3px rgba(17,17,17,.12);
   }
-  .n-input::placeholder { color: #94A3B8; }
+  .n-input::placeholder { color: #8A8A8A; }
 }

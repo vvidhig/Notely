@@ -46,8 +46,8 @@ export default function HighlightSidePanel({
         style={{
           width: 320,
           backgroundColor: "#ffffff",
-          borderLeft: "1px solid rgba(55,67,117,.10)",
-          boxShadow: "-12px 0 40px rgba(55,67,117,.10)",
+          borderLeft: "1px solid rgba(17,17,17,.10)",
+          boxShadow: "-12px 0 40px rgba(17,17,17,.10)",
           animation: "slideInRight 200ms ease",
         }}
       >
@@ -56,17 +56,17 @@ export default function HighlightSidePanel({
         {/* Header */}
         <div
           className="flex items-center justify-between px-5 py-4 flex-shrink-0"
-          style={{ borderBottom: "1px solid rgba(55,67,117,.08)" }}
+          style={{ borderBottom: "1px solid rgba(17,17,17,.08)" }}
         >
-          <p className="text-sm font-bold" style={{ color: "#374375" }}>
-            📝 Note on Highlight
+          <p className="text-lg font-bold" style={{ color: "#111111" }}>
+            Note on Highlight
           </p>
           <button
             onClick={onClose}
             className="transition-all"
-            style={{ color: "rgba(55,67,117,.40)" }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#374375"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(55,67,117,.40)"; }}
+            style={{ color: "rgba(17,17,17,.40)" }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#111111"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(17,17,17,.40)"; }}
           >
             <X size={16} />
           </button>
@@ -78,17 +78,17 @@ export default function HighlightSidePanel({
           {/* Highlighted text (read-only) */}
           <div>
             <p
-              className="text-[10px] font-bold uppercase tracking-widest mb-2"
-              style={{ color: "rgba(55,67,117,.40)" }}
+              className="text-sm font-bold uppercase tracking-widest mb-2"
+              style={{ color: "rgba(17,17,17,.40)" }}
             >
               Highlighted Text
             </p>
             <div
-              className="text-sm italic leading-relaxed px-3 py-2.5 rounded-xl"
+              className="text-lg italic leading-relaxed px-3 py-2.5 rounded-xl"
               style={{
-                backgroundColor: "rgba(255,220,50,.15)",
-                borderLeft: "3px solid rgba(200,180,0,.45)",
-                color: "#374375",
+                backgroundColor: "rgba(17,17,17,.06)",
+                borderLeft: "3px solid rgba(17,17,17,.35)",
+                color: "#111111",
               }}
             >
               "{highlight.highlighted_text}"
@@ -98,8 +98,8 @@ export default function HighlightSidePanel({
           {/* Note textarea */}
           <div>
             <p
-              className="text-[10px] font-bold uppercase tracking-widest mb-2"
-              style={{ color: "rgba(55,67,117,.40)" }}
+              className="text-sm font-bold uppercase tracking-widest mb-2"
+              style={{ color: "rgba(17,17,17,.40)" }}
             >
               Your Note
             </p>
@@ -109,21 +109,21 @@ export default function HighlightSidePanel({
               onChange={(e) => setNoteVal(e.target.value)}
               placeholder="Add a note about this highlight..."
               rows={5}
-              className="w-full text-sm resize-none outline-none"
+              className="w-full text-lg resize-none outline-none"
               style={{
-                backgroundColor: "rgba(55,67,117,.03)",
-                border: "1px solid rgba(55,67,117,.10)",
+                backgroundColor: "rgba(17,17,17,.03)",
+                border: "1px solid rgba(17,17,17,.10)",
                 borderRadius: 12,
                 padding: "10px 12px",
-                color: "#374375",
+                color: "#111111",
                 fontFamily: "inherit",
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderColor = "#374375";
-                e.currentTarget.style.boxShadow = "0 0 0 3px rgba(55,67,117,.08)";
+                e.currentTarget.style.borderColor = "#111111";
+                e.currentTarget.style.boxShadow = "0 0 0 3px rgba(17,17,17,.08)";
               }}
               onBlur={(e) => {
-                e.currentTarget.style.borderColor = "rgba(55,67,117,.10)";
+                e.currentTarget.style.borderColor = "rgba(17,17,17,.10)";
                 e.currentTarget.style.boxShadow = "none";
               }}
             />
@@ -133,54 +133,54 @@ export default function HighlightSidePanel({
           <button
             onClick={handleSave}
             disabled={saving}
-            className="w-full py-2.5 rounded-xl text-sm font-bold text-white transition-all disabled:opacity-60"
-            style={{ backgroundColor: saved ? "#22c55e" : "#374375" }}
-            onMouseEnter={(e) => { if (!saved) (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#2A3562"; }}
-            onMouseLeave={(e) => { if (!saved) (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#374375"; }}
+            className="w-full py-2.5 rounded-xl text-lg font-bold text-white transition-all disabled:opacity-60"
+            style={{ backgroundColor: saved ? "#111111" : "#111111" }}
+            onMouseEnter={(e) => { if (!saved) (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#000000"; }}
+            onMouseLeave={(e) => { if (!saved) (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#111111"; }}
           >
-            {saved ? "✓ Saved!" : saving ? "Saving..." : "💾 Save Note"}
+            {saved ? "✓ Saved!" : saving ? "Saving..." : "Save Note"}
           </button>
 
-          <div style={{ borderTop: "1px solid rgba(55,67,117,.07)" }} />
+          <div style={{ borderTop: "1px solid rgba(17,17,17,.07)" }} />
 
           {/* Delete highlight */}
           <button
             onClick={() => { onDelete(highlight.id); onClose(); }}
-            className="w-full py-2.5 rounded-xl text-sm font-bold transition-all"
-            style={{ color: "#895159", backgroundColor: "rgba(137,81,89,.06)" }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(137,81,89,.12)"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(137,81,89,.06)"; }}
+            className="w-full py-2.5 rounded-xl text-lg font-bold transition-all"
+            style={{ color: "#111111", backgroundColor: "rgba(17,17,17,.06)" }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(17,17,17,.12)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(17,17,17,.06)"; }}
           >
-            🗑️ Delete Highlight
+            Delete Highlight
           </button>
 
-          <div style={{ borderTop: "1px solid rgba(55,67,117,.07)" }} />
+          <div style={{ borderTop: "1px solid rgba(17,17,17,.07)" }} />
 
           {/* Linked task section */}
           <div>
             <p
-              className="text-[10px] font-bold uppercase tracking-widest mb-2"
-              style={{ color: "rgba(55,67,117,.40)" }}
+              className="text-sm font-bold uppercase tracking-widest mb-2"
+              style={{ color: "rgba(17,17,17,.40)" }}
             >
               Linked Task
             </p>
             {highlight.task_id ? (
               <div
-                className="flex items-center gap-2 text-xs font-bold py-2"
-                style={{ color: "#374375" }}
+                className="flex items-center gap-2 text-base font-bold py-2"
+                style={{ color: "#111111" }}
               >
-                <CheckCircle2 size={14} style={{ color: "#895159" }} />
+                <CheckCircle2 size={14} style={{ color: "#111111" }} />
                 Task already created
               </div>
             ) : (
               <button
                 onClick={() => { onCreateTask(highlight); onClose(); }}
-                className="w-full py-2.5 rounded-xl text-sm font-bold transition-all"
-                style={{ backgroundColor: "rgba(55,67,117,.07)", color: "#374375" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(55,67,117,.13)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(55,67,117,.07)"; }}
+                className="w-full py-2.5 rounded-xl text-lg font-bold transition-all"
+                style={{ backgroundColor: "rgba(17,17,17,.07)", color: "#111111" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(17,17,17,.13)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(17,17,17,.07)"; }}
               >
-                📋 Create Task from this highlight
+                Create Task from this highlight
               </button>
             )}
           </div>

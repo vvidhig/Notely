@@ -6,7 +6,7 @@ import { useHighlights } from "../hooks/useHighlights";
 import { useTasks } from "../hooks/useTasks";
 import { listSessions } from "../services/api";
 import type { Highlight, Session } from "../types";
-import { Pin, Search, Copy, Trash2, Download, ExternalLink } from "lucide-react";
+import { Pin, Search, Copy, Trash2, Download, ExternalLink, Sparkles } from "lucide-react";
 
 /* ─── page ────────────────────────────────────────────────────────────── */
 
@@ -15,16 +15,16 @@ export default function HighlightsPage() {
   const { highlights, loading, loadAll, remove, linkTask } = useHighlights();
   const { add: addTask } = useTasks();
 
-  const [sessions, setSessions]             = useState<Session[]>([]);
-  const [filterPin, setFilterPin]           = useState<"all" | "pinned">("all");
-  const [search, setSearch]                 = useState("");
-  const [bySession, setBySession]           = useState<number | null>(null);
-  const [pinnedIds, setPinnedIds]           = useState<Set<number>>(new Set());
-  const [taskHighlight, setTaskHighlight]   = useState<Highlight | null>(null);
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [filterPin, setFilterPin] = useState<"all" | "pinned">("all");
+  const [search, setSearch] = useState("");
+  const [bySession, setBySession] = useState<number | null>(null);
+  const [pinnedIds, setPinnedIds] = useState<Set<number>>(new Set());
+  const [taskHighlight, setTaskHighlight] = useState<Highlight | null>(null);
 
   useEffect(() => {
     loadAll();
-    listSessions().then((r) => setSessions(r.data)).catch(() => {});
+    listSessions().then((r) => setSessions(r.data)).catch(() => { });
   }, []);
 
   /* helpers */
@@ -48,7 +48,7 @@ export default function HighlightsPage() {
     });
   }, [highlights, filterPin, bySession, search, pinnedIds]);
 
-  const pinnedHighlights   = filtered.filter((h) => pinnedIds.has(h.id));
+  const pinnedHighlights = filtered.filter((h) => pinnedIds.has(h.id));
   const unpinnedHighlights = filtered.filter((h) => !pinnedIds.has(h.id));
 
   /* pin toggle */
@@ -62,7 +62,7 @@ export default function HighlightsPage() {
 
   /* copy */
   const handleCopy = (text: string) => {
-    navigator.clipboard.writeText(text).catch(() => {});
+    navigator.clipboard.writeText(text).catch(() => { });
   };
 
   /* export */
@@ -78,9 +78,9 @@ export default function HighlightsPage() {
       hs.forEach((h) => lines.push(`- "${h.highlighted_text}"\n`));
     });
     const blob = new Blob([lines.join("\n")], { type: "text/markdown" });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement("a");
-    a.href     = url;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
     a.download = "highlights.md";
     document.body.appendChild(a);
     a.click();
@@ -102,9 +102,7 @@ export default function HighlightsPage() {
   };
 
   const pageBg = {
-    backgroundColor: "#FFFCF5",
-    backgroundImage: "radial-gradient(rgba(55,67,117,.06) 1.5px, transparent 1.5px)",
-    backgroundSize: "28px 28px",
+    backgroundColor: "#FFFFFF",
   };
 
   return (
@@ -117,23 +115,23 @@ export default function HighlightsPage() {
           {/* ── header ────────────────────────────────────────────── */}
           <div className="flex items-start justify-between mb-5">
             <div>
-              <h1 className="font-['Yeseva_One'] text-2xl font-bold" style={{ color: "#374375" }}>
+              <h1 className="font-['Yeseva_One'] text-4xl font-bold" style={{ color: "#111111" }}>
                 Highlights
               </h1>
-              <p className="text-sm mt-0.5" style={{ color: "rgba(55,67,117,.55)" }}>
+              <p className="text-lg mt-0.5" style={{ color: "rgba(17,17,17,.55)" }}>
                 {highlights.length} highlights from {sessionGroups.length} sessions
               </p>
             </div>
             <button
               onClick={exportAllMd}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-lg font-bold transition-all"
               style={{
                 backgroundColor: "#ffffff",
-                border: "1px solid rgba(55,67,117,.12)",
-                color: "#374375",
-                boxShadow: "0 2px 8px rgba(55,67,117,.05)",
+                border: "1px solid rgba(17,17,17,.12)",
+                color: "#111111",
+                boxShadow: "0 2px 8px rgba(17,17,17,.05)",
               }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(55,67,117,.04)"; }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(17,17,17,.04)"; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#ffffff"; }}
             >
               <Download size={14} /> Export all
@@ -143,31 +141,31 @@ export default function HighlightsPage() {
           {/* ── recap card ────────────────────────────────────────── */}
           <div
             className="mb-5 rounded-2xl p-5"
-            style={{ backgroundColor: "#374375" }}
+            style={{ backgroundColor: "#111111" }}
           >
-            <p className="text-[10px] uppercase tracking-widest mb-3" style={{ color: "rgba(255,255,255,.50)" }}>
+            <p className="text-sm uppercase tracking-widest mb-3" style={{ color: "rgba(255,255,255,.50)" }}>
               THIS WEEK'S RECAP
             </p>
             <div className="flex gap-8">
               <div>
-                <p className="text-2xl font-bold text-white">{highlights.length}</p>
-                <p className="text-xs" style={{ color: "rgba(255,255,255,.60)" }}>Highlights</p>
+                <p className="text-4xl font-bold text-white">{highlights.length}</p>
+                <p className="text-base" style={{ color: "rgba(255,255,255,.60)" }}>Highlights</p>
               </div>
               <div>
-                <p className="text-2xl font-bold" style={{ color: "#BABDE2" }}>
+                <p className="text-4xl font-bold" style={{ color: "#FFFFFF" }}>
                   {highlights.filter((h) => h.task_id).length}
                 </p>
-                <p className="text-xs" style={{ color: "rgba(255,255,255,.60)" }}>Converted</p>
+                <p className="text-base" style={{ color: "rgba(255,255,255,.60)" }}>Converted</p>
               </div>
               <div>
-                <p className="text-2xl font-bold" style={{ color: "#E1AEA1" }}>
+                <p className="text-4xl font-bold" style={{ color: "#FFFFFF" }}>
                   {sessionGroups.length}
                 </p>
-                <p className="text-xs" style={{ color: "rgba(255,255,255,.60)" }}>Sessions</p>
+                <p className="text-base" style={{ color: "rgba(255,255,255,.60)" }}>Sessions</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-white">{pinnedIds.size}</p>
-                <p className="text-xs" style={{ color: "rgba(255,255,255,.60)" }}>Pinned</p>
+                <p className="text-4xl font-bold text-white">{pinnedIds.size}</p>
+                <p className="text-base" style={{ color: "rgba(255,255,255,.60)" }}>Pinned</p>
               </div>
             </div>
           </div>
@@ -185,27 +183,27 @@ export default function HighlightsPage() {
                     <button
                       key={f}
                       onClick={() => setFilterPin(f)}
-                      className="px-4 py-1.5 rounded-xl text-sm font-bold transition-all"
+                      className="px-4 py-1.5 rounded-xl text-lg font-bold transition-all"
                       style={{
-                        backgroundColor: filterPin === f ? "#374375" : "rgba(55,67,117,.08)",
-                        color: filterPin === f ? "#ffffff" : "#374375",
+                        backgroundColor: filterPin === f ? "#111111" : "rgba(17,17,17,.08)",
+                        color: filterPin === f ? "#ffffff" : "#111111",
                       }}
                     >
-                      {f === "pinned" ? "📌 Pinned" : "All"}
+                      {f === "pinned" ? "Pinned" : "All"}
                     </button>
                   ))}
                 </div>
                 <div className="relative">
-                  <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "rgba(55,67,117,.40)" }} />
+                  <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "rgba(17,17,17,.40)" }} />
                   <input
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search highlights…"
-                    className="pl-8 pr-3 py-1.5 rounded-xl text-sm outline-none"
+                    className="pl-8 pr-3 py-1.5 rounded-xl text-lg outline-none"
                     style={{
                       backgroundColor: "#ffffff",
-                      border: "1px solid rgba(55,67,117,.10)",
-                      color: "#374375",
+                      border: "1px solid rgba(17,17,17,.10)",
+                      color: "#111111",
                       width: "192px",
                     }}
                   />
@@ -217,7 +215,7 @@ export default function HighlightsPage() {
                 <div className="flex justify-center py-20">
                   <div
                     className="w-6 h-6 rounded-full border-2 animate-spin"
-                    style={{ borderColor: "#374375", borderTopColor: "transparent" }}
+                    style={{ borderColor: "#111111", borderTopColor: "transparent" }}
                   />
                 </div>
               )}
@@ -227,14 +225,14 @@ export default function HighlightsPage() {
                 <div className="flex flex-col items-center justify-center py-24 text-center">
                   <div
                     className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4"
-                    style={{ backgroundColor: "rgba(55,67,117,.08)" }}
+                    style={{ backgroundColor: "rgba(17,17,17,.08)" }}
                   >
-                    <span className="text-2xl">✦</span>
+                    <Sparkles size={28} style={{ color: "#111111" }} />
                   </div>
-                  <h3 className="font-['Yeseva_One'] text-2xl font-bold mb-2" style={{ color: "#374375" }}>
+                  <h3 className="font-['Yeseva_One'] text-4xl font-bold mb-2" style={{ color: "#111111" }}>
                     No highlights yet
                   </h3>
-                  <p className="text-sm font-medium" style={{ color: "rgba(55,67,117,.55)" }}>
+                  <p className="text-lg font-medium" style={{ color: "rgba(17,17,17,.55)" }}>
                     Select text in a session transcript to highlight important moments.
                   </p>
                 </div>
@@ -244,10 +242,10 @@ export default function HighlightsPage() {
               {!loading && pinnedHighlights.length > 0 && (
                 <>
                   <p
-                    className="text-[10px] font-bold uppercase tracking-widest mb-2"
-                    style={{ color: "rgba(55,67,117,.55)" }}
+                    className="text-sm font-bold uppercase tracking-widest mb-2"
+                    style={{ color: "rgba(17,17,17,.55)" }}
                   >
-                    📌 PINNED
+                    PINNED
                   </p>
                   <div className="space-y-3 mb-5">
                     {pinnedHighlights.map((h) => (
@@ -293,37 +291,37 @@ export default function HighlightsPage() {
               {/* by session */}
               <div
                 className="rounded-xl p-4"
-                style={{ backgroundColor: "#ffffff", border: "1px solid rgba(55,67,117,.08)", boxShadow: "0 2px 8px rgba(55,67,117,.05)" }}
+                style={{ backgroundColor: "#ffffff", border: "1px solid rgba(17,17,17,.08)", boxShadow: "0 2px 8px rgba(17,17,17,.05)" }}
               >
-                <p className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: "rgba(55,67,117,.55)" }}>
+                <p className="text-sm font-bold uppercase tracking-widest mb-3" style={{ color: "rgba(17,17,17,.55)" }}>
                   BY SESSION
                 </p>
                 {sessionGroups.length === 0 ? (
-                  <p className="text-xs" style={{ color: "rgba(55,67,117,.40)" }}>No sessions yet</p>
+                  <p className="text-base" style={{ color: "rgba(17,17,17,.40)" }}>No sessions yet</p>
                 ) : (
                   <div className="space-y-0.5">
                     {sessionGroups.map((sg) => (
                       <button
                         key={sg.id}
                         onClick={() => setBySession(bySession === sg.id ? null : sg.id)}
-                        className="w-full flex items-center justify-between py-1.5 px-2 rounded-lg text-sm transition-all text-left"
+                        className="w-full flex items-center justify-between py-1.5 px-2 rounded-lg text-lg transition-all text-left"
                         style={{
-                          backgroundColor: bySession === sg.id ? "rgba(55,67,117,.08)" : "transparent",
-                          color: "#374375",
+                          backgroundColor: bySession === sg.id ? "rgba(17,17,17,.08)" : "transparent",
+                          color: "#111111",
                         }}
                         onMouseEnter={(e) => {
                           if (bySession !== sg.id)
-                            (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(55,67,117,.04)";
+                            (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(17,17,17,.04)";
                         }}
                         onMouseLeave={(e) => {
                           if (bySession !== sg.id)
                             (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent";
                         }}
                       >
-                        <span className="truncate font-medium text-xs pr-2">{sg.title}</span>
+                        <span className="truncate font-medium text-base pr-2">{sg.title}</span>
                         <span
-                          className="text-[10px] px-1.5 py-0.5 rounded-full flex-shrink-0 font-bold"
-                          style={{ backgroundColor: "rgba(55,67,117,.10)", color: "#374375" }}
+                          className="text-sm px-1.5 py-0.5 rounded-full flex-shrink-0 font-bold"
+                          style={{ backgroundColor: "rgba(17,17,17,.10)", color: "#111111" }}
                         >
                           {sg.count}
                         </span>
@@ -336,20 +334,20 @@ export default function HighlightsPage() {
               {/* quick actions */}
               <div
                 className="rounded-xl p-4"
-                style={{ backgroundColor: "#ffffff", border: "1px solid rgba(55,67,117,.08)", boxShadow: "0 2px 8px rgba(55,67,117,.05)" }}
+                style={{ backgroundColor: "#ffffff", border: "1px solid rgba(17,17,17,.08)", boxShadow: "0 2px 8px rgba(17,17,17,.05)" }}
               >
-                <p className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: "rgba(55,67,117,.55)" }}>
+                <p className="text-sm font-bold uppercase tracking-widest mb-3" style={{ color: "rgba(17,17,17,.55)" }}>
                   QUICK ACTIONS
                 </p>
                 <button
                   onClick={exportAllMd}
-                  className="flex items-center gap-2 text-sm py-1.5 w-full rounded-lg px-2 transition-all text-left"
-                  style={{ color: "#374375" }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(55,67,117,.06)"; }}
+                  className="flex items-center gap-2 text-lg py-1.5 w-full rounded-lg px-2 transition-all text-left"
+                  style={{ color: "#111111" }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(17,17,17,.06)"; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; }}
                 >
                   <Download size={13} />
-                  <span className="text-xs font-medium">Export as Markdown</span>
+                  <span className="text-base font-medium">Export as Markdown</span>
                 </button>
               </div>
 
@@ -397,29 +395,29 @@ function HighlightCard({
       style={{
         backgroundColor: "#ffffff",
         borderRadius: "14px",
-        border: "1px solid rgba(55,67,117,.08)",
-        borderLeft: `3px solid ${isPinned ? "#374375" : "#BABDE2"}`,
+        border: "1px solid rgba(17,17,17,.08)",
+        borderLeft: `3px solid ${isPinned ? "#111111" : "#8A8A8A"}`,
         padding: "16px 20px",
-        boxShadow: "0 2px 8px rgba(55,67,117,.05)",
+        boxShadow: "0 2px 8px rgba(17,17,17,.05)",
       }}
     >
       {/* top row */}
       <div className="flex items-center justify-between mb-2">
         <span
-          className="text-[10px] font-bold px-2.5 py-0.5 rounded-full"
-          style={{ backgroundColor: "rgba(186,189,226,.20)", color: "#374375" }}
+          className="text-sm font-bold px-2.5 py-0.5 rounded-full"
+          style={{ backgroundColor: "rgba(17,17,17,.20)", color: "#111111" }}
         >
-          ✦ Highlight
+          <Sparkles size={11} className="inline mr-1" />Highlight
         </span>
         {isPinned && (
-          <span className="text-[9px] font-bold" style={{ color: "#895159" }}>
-            📌 PINNED
+          <span className="text-xs font-bold inline-flex items-center gap-1" style={{ color: "#111111" }}>
+            <Pin size={10} /> PINNED
           </span>
         )}
       </div>
 
       {/* text */}
-      <p className="text-sm leading-relaxed mb-3" style={{ color: "#374375" }}>
+      <p className="text-lg leading-relaxed mb-3" style={{ color: "#111111" }}>
         {h.highlighted_text}
       </p>
 
@@ -427,10 +425,10 @@ function HighlightCard({
       <div className="flex items-center justify-between">
         <button
           onClick={onViewSession}
-          className="flex items-center gap-1 text-xs transition-all"
-          style={{ color: "rgba(55,67,117,.55)" }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#374375"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(55,67,117,.55)"; }}
+          className="flex items-center gap-1 text-base transition-all"
+          style={{ color: "rgba(17,17,17,.55)" }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#111111"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(17,17,17,.55)"; }}
         >
           <ExternalLink size={10} />
           <span>{sessionTitle}</span>
@@ -444,22 +442,22 @@ function HighlightCard({
           {!h.task_id ? (
             <button
               onClick={onCreateTask}
-              className="text-[10px] font-bold px-2.5 py-1 rounded-lg transition-all"
-              style={{ backgroundColor: "rgba(55,67,117,.08)", color: "#374375" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(55,67,117,.14)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(55,67,117,.08)"; }}
+              className="text-sm font-bold px-2.5 py-1 rounded-lg transition-all"
+              style={{ backgroundColor: "rgba(17,17,17,.08)", color: "#111111" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(17,17,17,.14)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(17,17,17,.08)"; }}
             >
               + Task
             </button>
           ) : (
-            <span className="text-[10px] font-bold" style={{ color: "#BABDE2" }}>✓ Task</span>
+            <span className="text-sm font-bold" style={{ color: "#8A8A8A" }}>✓ Task</span>
           )}
 
           <button
             onClick={onCopy}
             className="p-1.5 rounded-lg transition-all"
-            style={{ color: "rgba(55,67,117,.45)" }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(55,67,117,.08)"; }}
+            style={{ color: "rgba(17,17,17,.45)" }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(17,17,17,.08)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; }}
             title="Copy text"
           >
@@ -469,20 +467,20 @@ function HighlightCard({
           <button
             onClick={onPin}
             className="p-1.5 rounded-lg transition-all"
-            style={{ color: isPinned ? "#374375" : "rgba(55,67,117,.45)" }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(55,67,117,.08)"; }}
+            style={{ color: isPinned ? "#111111" : "rgba(17,17,17,.45)" }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(17,17,17,.08)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; }}
             title={isPinned ? "Unpin" : "Pin"}
           >
-            <Pin size={13} style={{ fill: isPinned ? "#374375" : "none" }} />
+            <Pin size={13} style={{ fill: isPinned ? "#111111" : "none" }} />
           </button>
 
           <button
             onClick={onDelete}
             className="p-1.5 rounded-lg transition-all"
-            style={{ color: "rgba(55,67,117,.45)" }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#895159"; (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(137,81,89,.06)"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(55,67,117,.45)"; (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; }}
+            style={{ color: "rgba(17,17,17,.45)" }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#111111"; (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(17,17,17,.06)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(17,17,17,.45)"; (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; }}
             title="Delete highlight"
           >
             <Trash2 size={13} />

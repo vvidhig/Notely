@@ -22,12 +22,12 @@ export default function QuickCapture({ onAdd }: Props) {
       style={{
         background: "#ffffff",
         borderRadius: "24px",
-        border: "1px solid rgba(55,67,117,.08)",
-        boxShadow: "0 8px 32px rgba(55,67,117,.07)",
+        border: "1px solid rgba(17,17,17,.08)",
+        boxShadow: "0 8px 32px rgba(17,17,17,.07)",
         padding: "12px 16px",
       }}
     >
-      <p className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: "rgba(55,67,117,.50)" }}>
+      <p className="text-sm font-bold uppercase tracking-widest mb-2" style={{ color: "rgba(17,17,17,.50)" }}>
         Quick capture
       </p>
       <div className="flex gap-2">
@@ -37,19 +37,19 @@ export default function QuickCapture({ onAdd }: Props) {
           onKeyDown={(e) => e.key === "Enter" && submit()}
           placeholder="Add a task instantly…"
           disabled={loading}
-          className="flex-1 text-sm font-medium px-3 py-2 transition-all focus:outline-none"
+          className="flex-1 text-lg font-medium px-3 py-2 transition-all focus:outline-none"
           style={{
             background: "#F8FAFC",
-            border: "1px solid rgba(55,67,117,.10)",
+            border: "1px solid rgba(17,17,17,.10)",
             borderRadius: "12px",
-            color: "#374375",
+            color: "#111111",
           }}
           onFocus={(e) => {
-            (e.target as HTMLInputElement).style.borderColor = "#374375";
-            (e.target as HTMLInputElement).style.boxShadow = "0 0 0 3px rgba(55,67,117,.12)";
+            (e.target as HTMLInputElement).style.borderColor = "#111111";
+            (e.target as HTMLInputElement).style.boxShadow = "0 0 0 3px rgba(17,17,17,.12)";
           }}
           onBlur={(e) => {
-            (e.target as HTMLInputElement).style.borderColor = "rgba(55,67,117,.10)";
+            (e.target as HTMLInputElement).style.borderColor = "rgba(17,17,17,.10)";
             (e.target as HTMLInputElement).style.boxShadow = "none";
           }}
         />
@@ -58,12 +58,12 @@ export default function QuickCapture({ onAdd }: Props) {
           disabled={loading || !value.trim()}
           className="flex-shrink-0 flex items-center justify-center px-3 py-2 font-bold transition-all disabled:opacity-40"
           style={{
-            background: "#374375",
+            background: "#111111",
             color: "#ffffff",
             borderRadius: "12px",
           }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#2A3562"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#374375"; }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#000000"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#111111"; }}
         >
           <Plus size={15} />
         </button>
