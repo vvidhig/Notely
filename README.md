@@ -4,6 +4,14 @@
 
 Notely is an all-in-one productivity workspace: record meetings and sessions, let AI split the transcript by speaker and generate structured summaries, highlight the moments that matter, turn them into tasks, and track your work — all in one place.
 
+<img src="assests/landing-page.png">
+<img src="assests/dashboard.png">
+<img src="assests/tasks.png">
+<img src="assests/sessions.png">
+<img src="assests/highlights.png">
+<img src="assests/schedule.png">
+
+
 ## Features
 
 - 🎙 **Meeting recording** — record short voice clips or full conversations, transcribed instantly (Groq Whisper)
